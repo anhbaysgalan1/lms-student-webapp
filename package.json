@@ -1,0 +1,38 @@
+{
+  "name": "lms-student-webapp",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "ajv": "^6.5.2",
+    "axios": "^0.18.0",
+    "cross-env": "^5.2.0",
+    "formik": "^0.11.11",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.2",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.1",
+    "react-redux": "^5.0.5",
+    "react-router-dom": "^4.1.1",
+    "react-scripts": "^1.1.4",
+    "react-youtube": "^7.6.0",
+    "reactstrap": "^6.1.0",
+    "redux": "^4.0.0",
+    "redux-promise": "^0.6.0",
+    "redux-thunk": "^2.3.0"
+  },
+  "scripts": {
+    "start": "cross-env PORT=3333 NODE_PATH=src react-scripts start",
+    "build": "cross-env PORT=3333 NODE_PATH=src react-scripts build",
+    "test": "cross-env PORT=3333 NODE_PATH=src react-scripts test --env=jsdom",
+    "eject": "cross-env PORT=3333 NODE_PATH=src react-scripts eject"
+  },
+  "devDependencies": {
+    "@types/prop-types": "^15.5.4",
+    "eslint": "^5.4.0",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.10.0"
+  }
+}
