@@ -22,10 +22,10 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "cross-env PORT=3333 NODE_PATH=src react-scripts start",
-    "build": "cross-env PORT=3333 NODE_PATH=src react-scripts build",
-    "test": "cross-env PORT=3333 NODE_PATH=src react-scripts test --env=jsdom",
-    "eject": "cross-env PORT=3333 NODE_PATH=src react-scripts eject"
+    "start": "cross-env NODE_PATH=src react-scripts start",
+    "build": "cross-env NODE_PATH=src react-scripts build",
+    "test": "cross-env NODE_PATH=src react-scripts test --env=jsdom",
+    "eject": "cross-env NODE_PATH=src react-scripts eject"
   },
   "devDependencies": {
     "@types/prop-types": "^15.5.4",
