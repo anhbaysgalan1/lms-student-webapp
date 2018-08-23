@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Typo_Hoop_Regular_Demo';
+  src: url(../font/Typo_Hoop_Regular_Demo.otf) format('opentype');
+}
+
 #root {
   width: 100vw;
   height: 100vh;
@@ -11,4 +16,59 @@
 html,
 body {
   height: 100%;
+  font-family: 'Typo_Hoop_Regular_Demo';
+}
+
+.form-login {
+  width: 380px;
+  height: 560px;
+  max-height: 600px;
+  max-width: 380px;
+  box-shadow: 1px 2px 18px 7px rgb(41, 41, 41);
+  padding: 20px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(128, 128, 128);
+  border-radius: 2%;
+}
+
+div.invalid-feedback {
+  color: #a50212;
+}
+
+.bg-login {
+  background-color: rgb(77,77,77);
+}
+
+input.form-check-input {
+  position: relative;
+  left: 0;
+  margin: 0;
+  border: 1px black solid;
+}
+
+input.form-control {
+  border: 1px black solid;
+  border-radius: 0px;
+}
+
+input.form-check-input {
+  margin-top: 8px;
+  border-style: solid;
+}
+
+label.form-check-label {
+  font-size: 80%;
+}
+
+.login {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button-login {
+  background-color: rgb(23, 152, 212);
+  width: 35%;
+  border-radius: 11px;
+  box-shadow: 2px 2px 5px 0px rgb(41, 41, 41);
 }

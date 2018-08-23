@@ -8,8 +8,6 @@ import {
   Button,
 } from 'reactstrap';
 
-import './login.css';
-
 class LoginForm extends Component {
   constructor(props) {
     super(props);
@@ -33,27 +31,31 @@ class LoginForm extends Component {
       isSubmitting,
     } = formProps;
 
+    const { username, password } = values;
+
     return (
       <Form onSubmit={handleSubmit}>
         <FormGroup>
           <Label>Username</Label>
           <Input
             type="text"
-            name="asd"
-            value="asd"
+            name="username"
+            value={username}
             onBlur={handleBlur}
             onChange={handleChange}
+            invalid={loginReducer.errMsg !== null}
           />
         </FormGroup>
 
         <FormGroup>
           <Label>Password</Label>
           <Input
-            type="text"
-            name="asd"
-            value="asd"
+            type="password"
+            name="password"
+            value={password}
             onBlur={handleBlur}
             onChange={handleChange}
+            invalid={loginReducer.errMsg !== null}
           />
         </FormGroup>
         <div className="login">
