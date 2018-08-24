@@ -3,12 +3,16 @@ import {
   LOGIN, CHECK_AUTH, LOGOUT,
 } from '../actions/authAction';
 
-export default function (state = { user: null, errMsg: null }, action) {
+export default function (state = { user: null, errMsg: null, checked: null }, action) {
   switch (action.type) {
     case LOGIN: {
-      const success = _.get(action.payload, 'data.success');
-      const data = _.get(action.payload, 'data.data');
-      const message = _.get(action.payload, 'data.message');
+      const success = _.get(action.payload.request, 'data.success');
+      const data = _.get(action.payload.request, 'data.data');
+      const message = _.get(action.payload.request, 'data.message');
+      const checked = _.get(action.payload, 'checked');
+      if (checked && data) {
+        localStorage.setItem('remember', JSON.stringify(data));
+      }
       return success
         ? { ...state, user: data, errMsg: null }
         : { ...state, user: null, errMsg: message };

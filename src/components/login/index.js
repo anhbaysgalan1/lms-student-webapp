@@ -18,18 +18,24 @@ class Login extends Component {
     this.props = props;
     this.onSubmit = this.onSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleChangeCheck = this.handleChangeCheck.bind(this);
     this.state = {
       loggingIn: false,
       username: '',
       password: '',
       clearErr: false,
+      checkStatus: false,
     };
+  }
+
+  componentWillMount() {
+    // localStorage.setItem('myData', 'abc');
+    // console.log(localStorage.getItem('myData'));
   }
 
   componentWillReceiveProps(nextProps) {
     const { loggingIn } = this.state;
     const { user, errMsg } = nextProps.loginReducer;
-
     if (!user && errMsg && loggingIn) {
       this.setState({
         loggingIn: false,
@@ -40,15 +46,13 @@ class Login extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    const { username, password } = this.state;
+    const { username, password, checkStatus } = this.state;
     const { loginAction } = this.props;
-
     this.setState({
       loggingIn: true,
       clearErr: false,
     });
-
-    loginAction(username, password);
+    loginAction(username, password, checkStatus);
   }
 
   handleInputChange(event) {
@@ -58,10 +62,25 @@ class Login extends Component {
     });
   }
 
+  handleChangeCheck() {
+    const { checkStatus } = this.state;
+    if (!checkStatus) {
+      this.setState({
+        checkStatus: true,
+      });
+    } else {
+      this.setState({
+        checkStatus: false,
+      });
+    }
+  }
+
   render() {
     const {
-      username, password, loggingIn, clearErr,
+      username, password, loggingIn, clearErr, checkStatus,
     } = this.state;
+    console.log(localStorage.getItem('remember'));
+    
     const { loginReducer } = this.props;
     return (
       <div className="w-100 h-100 d-flex justify-content-center align-items-center bg-login">
@@ -115,10 +134,12 @@ class Login extends Component {
             }
               </div>
               <div className="login">
-                <Label check>
-                  <Input type="checkbox" />
+                <Label check className="d-flex align-items-center justify-content-between">
+                  <div className="remember-me">
+                    <Input type="checkbox" checked={checkStatus} onChange={this.handleChangeCheck} />
+                  </div>
                   {' '}
-              remember me
+                  <div className="remember-me ml-1"> remember me </div>
                 </Label>
                 <Button className="button-login"> Log In </Button>
               </div>

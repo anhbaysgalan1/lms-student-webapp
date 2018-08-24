@@ -9,7 +9,7 @@ export const CHECK_AUTH = 'CHECK AUTH';
 axios.defaults.validateStatus = status => status < 500;
 axios.defaults.withCredentials = true;
 
-export function login(username, password) {
+export async function login(username, password, checked) {
   const body = { username, password };
   const request = axios.post(API_AUTH, body);
   const tokenInterceptor = response => new Promise(
@@ -19,7 +19,10 @@ export function login(username, password) {
   );
   return {
     type: LOGIN,
-    payload: request.then(tokenInterceptor),
+    payload: {
+      request: await request.then(tokenInterceptor),
+      checked,
+    },
   };
 }
 
