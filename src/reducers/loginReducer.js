@@ -10,8 +10,9 @@ export default function (state = { user: null, errMsg: null, checked: null }, ac
       const data = _.get(action.payload.request, 'data.data');
       const message = _.get(action.payload.request, 'data.message');
       const checked = _.get(action.payload, 'checked');
+      console.log(data);
       if (checked && data) {
-        localStorage.setItem('remember', JSON.stringify(data));
+        localStorage.setItem('rememberData', JSON.stringify(data));
       }
       return success
         ? { ...state, user: data, errMsg: null }

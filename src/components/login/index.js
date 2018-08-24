@@ -29,8 +29,13 @@ class Login extends Component {
   }
 
   componentWillMount() {
-    // localStorage.setItem('myData', 'abc');
-    // console.log(localStorage.getItem('myData'));
+    const dataStorage = JSON.parse(localStorage.getItem('rememberData'));
+    const checkedData = !!dataStorage;
+    if (checkedData) {
+      this.setState({
+        username: dataStorage.username,
+      });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -79,8 +84,6 @@ class Login extends Component {
     const {
       username, password, loggingIn, clearErr, checkStatus,
     } = this.state;
-    console.log(localStorage.getItem('remember'));
-    
     const { loginReducer } = this.props;
     return (
       <div className="w-100 h-100 d-flex justify-content-center align-items-center bg-login">
