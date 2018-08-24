@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter, Switch, Route } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import { checkAuth, logout } from '../actions/authAction';
-import { ROUTE_STUDENT_LOGIN } from './routes';
+// import { ROUTE_STUDENT_LOGIN } from './routes';
 
 import Login from './login';
 import './App.css';
