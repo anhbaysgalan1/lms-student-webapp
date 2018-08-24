@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
-import { checkAuth, logout } from '../actions/authAction';
+import { checkAuth, logout, loginRemember } from '../actions/authAction';
 // import { ROUTE_STUDENT_LOGIN } from './routes';
 
 import Login from './login';
@@ -17,6 +17,11 @@ class App extends Component {
   componentWillMount() {
     const { checkAuthAction } = this.props;
     checkAuthAction();
+    const dataStorage = JSON.parse(localStorage.getItem('rememberData'));
+    const checkedData = !!dataStorage;
+    if (checkedData) {
+      loginRemember(dataStorage.username, dataStorage.hashPassword);
+    }
   }
 
   render() {
@@ -61,6 +66,7 @@ function mapReducerProps({ loginReducer }) {
 const actions = {
   logoutAction: logout,
   checkAuthAction: checkAuth,
+  loginRemember,
 };
 
 App.propTypes = {

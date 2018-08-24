@@ -34,6 +34,7 @@ class Login extends Component {
     if (checkedData) {
       this.setState({
         username: dataStorage.username,
+        // password: dataStorage.hashPassword,
       });
     }
   }

@@ -5,6 +5,7 @@
   "dependencies": {
     "ajv": "^6.5.2",
     "axios": "^0.18.0",
+    "bcrypt-nodejs": "0.0.3",
     "cross-env": "^5.2.0",
     "formik": "^0.11.11",
     "lodash": "^4.17.10",
