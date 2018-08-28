@@ -29,7 +29,7 @@ class Login extends Component {
   }
 
   componentWillMount() {
-    const dataStorage = JSON.parse(localStorage.getItem('rememberData'));
+    const dataStorage = JSON.parse(localStorage.getItem('rememberuser'));
     const checkedData = !!dataStorage;
     if (checkedData) {
       this.setState({

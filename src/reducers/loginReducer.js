@@ -11,20 +11,23 @@ export default function (state = { user: null, errMsg: null, checked: null }, ac
       const message = _.get(action.payload.request, 'data.message');
       const checked = _.get(action.payload, 'checked');
       if (checked && data) {
-        localStorage.clear();
+        localStorage.removeItem('rememberData');
         const dataSave = data;
-        dataSave.hashPassword = action.payload.hashPassword;
+        dataSave.hashPassword = 'Định xem pass á? Không có mùa xuân đấy đâu!';
         localStorage.setItem('rememberData', JSON.stringify(dataSave));
+        localStorage.setItem('rememberuser', JSON.stringify(dataSave));
       }
-      console.log('LOGIN_Manually');
+      if (data) {
+        return success
+          ? { ...state, user: data, errMsg: null }
+          : { ...state, user: null, errMsg: message };
+      }
       return success
         ? { ...state, user: data, errMsg: null }
         : { ...state, user: null, errMsg: message };
     }
 
     case LOGIN_REMEMBER: {
-      console.log('LOGIN_REMEMBER');
-
       const success = _.get(action.payload.request, 'data.success');
       const data = _.get(action.payload.request, 'data.data');
       const message = _.get(action.payload.request, 'data.message');
@@ -41,6 +44,7 @@ export default function (state = { user: null, errMsg: null, checked: null }, ac
     }
     case LOGOUT:
     {
+      localStorage.removeItem('rememberData');
       return { user: null, errMsg: null };
     }
 

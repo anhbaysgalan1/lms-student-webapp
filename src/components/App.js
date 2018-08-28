@@ -12,20 +12,36 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.props = props;
+    this.state = {
+      autoLogin: false,
+    };
+    this.logoutHandle = this.logoutHandle.bind(this);
   }
 
   componentWillMount() {
-    const { checkAuthAction } = this.props;
+    const { checkAuthAction, loginAuto } = this.props;
     checkAuthAction();
     const dataStorage = JSON.parse(localStorage.getItem('rememberData'));
     const checkedData = !!dataStorage;
     if (checkedData) {
-      loginRemember(dataStorage.username, dataStorage.hashPassword);
+      this.setState({
+        autoLogin: true,
+      });
+      loginAuto(dataStorage.username, dataStorage.hashPassword);
     }
   }
 
+  logoutHandle() {
+    const { logoutAction } = this.props;
+    this.setState({
+      autoLogin: false,
+    });
+    logoutAction();
+  }
+
   render() {
-    const { logoutAction, loginReducer } = this.props;
+    const { autoLogin } = this.state;
+    const { loginReducer } = this.props;
     const { user } = loginReducer;
     if (user) {
       if (user.role === 1) {
@@ -37,8 +53,8 @@ class App extends Component {
           //   />
           // </Switch>
           <div>
-ASDA
-            <button className="ml-2" type="button" onClick={logoutAction}>
+            Access Successfully!
+            <button className="ml-2" type="button" onClick={this.logoutHandle}>
             Logout?
             </button>
 
@@ -49,13 +65,19 @@ ASDA
       return (
         <div>
           You havent permission to access this website!
-          <button className="ml-2" type="button" onClick={logoutAction}>
+          <button className="ml-2" type="button" onClick={this.logoutHandle}>
             Logout?
           </button>
         </div>
       );
     }
-    return <Login />;
+    return autoLogin ? (
+      <div className="d-flex justify-content-center">
+        {/* eslint-disable global-require */}
+        <img alt="" src={require('../statics/loader.gif')} />
+        {/* eslint-enable global-require */}
+      </div>
+    ) : <Login />;
   }
 }
 
@@ -66,7 +88,7 @@ function mapReducerProps({ loginReducer }) {
 const actions = {
   logoutAction: logout,
   checkAuthAction: checkAuth,
-  loginRemember,
+  loginAuto: loginRemember,
 };
 
 App.propTypes = {
@@ -76,6 +98,7 @@ App.propTypes = {
   }).isRequired,
   logoutAction: PropTypes.func.isRequired,
   checkAuthAction: PropTypes.func.isRequired,
+  loginAuto: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(mapReducerProps, actions)(App));
