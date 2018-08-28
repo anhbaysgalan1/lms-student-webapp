@@ -28,9 +28,16 @@ export default function (state = { user: null, errMsg: null, checked: null }, ac
     }
 
     case LOGIN_REMEMBER: {
+      console.log('Remember');
+
       const success = _.get(action.payload.request, 'data.success');
       const data = _.get(action.payload.request, 'data.data');
       const message = _.get(action.payload.request, 'data.message');
+      if (data) {
+        return success
+          ? { ...state, user: data, errMsg: null }
+          : { ...state, user: null, errMsg: message };
+      }
       return success
         ? { ...state, user: data, errMsg: null }
         : { ...state, user: null, errMsg: message };
