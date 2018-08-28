@@ -9,7 +9,7 @@ import {
   Button,
   FormFeedback,
 } from 'reactstrap';
-import mainLogo from '../../images/logo/logo.png';
+import mainLogo from 'images/logo/logo.png';
 import { login } from '../../actions/authAction';
 
 class Login extends Component {

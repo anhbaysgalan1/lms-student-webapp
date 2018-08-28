@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Typo_Hoop_Regular_Demo';
-  src: url('../font/Typo_Hoop_Regular_Demo.otf') format('opentype');
+  src: url('/fonts/Typo_Hoop_Regular_Demo.otf') format('opentype');
 }
 
 #root {
