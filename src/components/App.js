@@ -21,10 +21,12 @@ class App extends Component {
 
   componentWillMount() {
     const { checkAuthAction, loginAuto } = this.props;
+    const { loginReducer } = this.props;
+    const { user } = loginReducer;
     checkAuthAction();
     const dataStorage = JSON.parse(localStorage.getItem('rememberData'));
     const checkedData = !!dataStorage;
-    if (checkedData) {
+    if (checkedData && !user) {
       this.setState({
         autoLogin: true,
       });
