@@ -27,7 +27,7 @@ class App extends Component {
       this.setState({
         autoLogin: true,
       });
-      // loginAuto(dataStorage.username, dataStorage.hashPassword);
+      loginAuto(dataStorage.username, dataStorage.hashPassword);
     }
   }
 
@@ -43,10 +43,8 @@ class App extends Component {
     const { autoLogin } = this.state;
     const { loginReducer } = this.props;
     const { user } = loginReducer;
-    console.log(autoLogin);
-    console.log(user);
     if ((user && autoLogin) || user) {
-      if (user.role === 1) {
+      if (user.role === 0) {
         return (
           // <Switch>
           //   <Route

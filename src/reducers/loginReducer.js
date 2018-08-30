@@ -13,14 +13,9 @@ export default function (state = { user: null, errMsg: null, checked: null }, ac
       if (checked && data) {
         localStorage.removeItem('rememberData');
         const dataSave = data;
-        dataSave.hashPassword = 'Định xem pass á? Không có mùa xuân đấy đâu!';
+        dataSave.hashPassword = action.payload.hashPassword;
         localStorage.setItem('rememberData', JSON.stringify(dataSave));
         localStorage.setItem('rememberuser', JSON.stringify(dataSave));
-      }
-      if (data) {
-        return success
-          ? { ...state, user: data, errMsg: null }
-          : { ...state, user: null, errMsg: message };
       }
       return success
         ? { ...state, user: data, errMsg: null }
@@ -33,11 +28,6 @@ export default function (state = { user: null, errMsg: null, checked: null }, ac
       const success = _.get(action.payload.request, 'data.success');
       const data = _.get(action.payload.request, 'data.data');
       const message = _.get(action.payload.request, 'data.message');
-      if (data) {
-        return success
-          ? { ...state, user: data, errMsg: null }
-          : { ...state, user: null, errMsg: message };
-      }
       return success
         ? { ...state, user: data, errMsg: null }
         : { ...state, user: null, errMsg: message };
