@@ -12,12 +12,13 @@
 
 .playlist .playlist-list {
   max-height: 200px;
-  transition: all .5s ease-in-out;
+  transition: max-height .5s ease-in-out;
   overflow: hidden;
 }
 
 .playlist.expand .playlist-list {
-  height: auto;
+  max-height: 600px;
+  overflow-y: auto;
 }
 
 .playlist .title {
