@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import { checkAuth, logout, loginRemember } from '../actions/authAction';
-// import { ROUTE_STUDENT_LOGIN } from './routes';
 
-import Login from './login';
+import { checkAuth, logout, loginRemember } from 'actions/authAction';
+
+import Login from './Login';
+import Main from './Main';
 import './App.css';
 
 class App extends Component {
@@ -19,7 +20,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    const { checkAuthAction, loginAuto } = this.props;
+    const { checkAuthAction } = this.props;
     checkAuthAction();
     const dataStorage = JSON.parse(localStorage.getItem('rememberData'));
     const checkedData = !!dataStorage;
@@ -27,7 +28,6 @@ class App extends Component {
       this.setState({
         autoLogin: true,
       });
-      // loginAuto(dataStorage.username, dataStorage.hashPassword);
     }
   }
 
@@ -43,27 +43,9 @@ class App extends Component {
     const { autoLogin } = this.state;
     const { loginReducer } = this.props;
     const { user } = loginReducer;
-    console.log(autoLogin);
-    console.log(user);
+
     if ((user && autoLogin) || user) {
-      if (user.role === 1) {
-        return (
-          // <Switch>
-          //   <Route
-          //     path={ROUTE_STUDENT_LOGIN}
-          //     component={Login}
-          //   />
-          // </Switch>
-          <div>
-            Access Successfully!
-            <button className="ml-2" type="button" onClick={this.logoutHandle}>
-            Logout?
-            </button>
-
-          </div>
-
-        );
-      }
+      if (user.role === 0 || user.role === 1) return <Main />;
       return (
         <div>
           You havent permission to access this website!
@@ -100,7 +82,6 @@ App.propTypes = {
   }).isRequired,
   logoutAction: PropTypes.func.isRequired,
   checkAuthAction: PropTypes.func.isRequired,
-  loginAuto: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(mapReducerProps, actions)(App));
