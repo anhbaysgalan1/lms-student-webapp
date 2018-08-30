@@ -71,7 +71,7 @@ class App extends Component {
         </div>
       );
     }
-    return autoLogin ? (
+    return !autoLogin && user ? (
       <div className="d-flex justify-content-center">
         {/* eslint-disable global-require */}
         <img alt="" src={require('../statics/loader.gif')} />
