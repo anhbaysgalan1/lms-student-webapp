@@ -113,6 +113,7 @@ class Login extends Component {
                   value={password}
                   onChange={this.handleInputChange}
                   invalid={loginReducer.errMsg !== null}
+                  autoComplete="off"
                 />
               </FormGroup>
               <div>
