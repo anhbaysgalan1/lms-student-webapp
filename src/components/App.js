@@ -48,7 +48,7 @@ class App extends Component {
     const { user } = loginReducer;
 
     if ((user && autoLogin) || user) {
-      if (user.role === 0 || user.role === 1) return <Main />;
+      if (user.role === 0) return <Main />;
       return (
         <div>
           You havent permission to access this website!
