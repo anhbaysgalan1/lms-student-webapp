@@ -5,7 +5,7 @@ import { PropTypes } from 'prop-types';
 
 import { checkAuth, logout, loginRemember } from 'actions/authAction';
 
-import Login from './login';
+import Login from './Login';
 import Main from './Main';
 import './App.css';
 
