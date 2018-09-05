@@ -10,6 +10,10 @@
   margin: 70px auto;
 }
 
+.playlist:last-child {
+  margin-bottom: 0;
+}
+
 .playlist .playlist-list {
   max-height: 200px;
   transition: max-height .5s ease-in-out;
