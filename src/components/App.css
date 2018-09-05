@@ -18,6 +18,10 @@ body {
   padding-top: 90px;
 }
 
+.wrapper {
+  height: 100%;
+}
+
 html,
 body {
   height: 100%;
