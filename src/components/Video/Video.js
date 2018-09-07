@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import _ from 'lodash';
-import { Button, Col, Row } from 'reactstrap';
+import { Col } from 'reactstrap';
 import { fetchPlaylistWithID } from '../../actions/videosInPlaylist';
-import './index.css';
+import './index1.css';
+import thumbnail from '../../images/1.png';
 
 class VideosInPlaylist extends Component {
   constructor(props) {
@@ -21,11 +22,13 @@ class VideosInPlaylist extends Component {
 
   renderVideos() {
     const { videoInPlaylistReducer } = this.props;
-    console.log(videoInPlaylistReducer);
     return (
       _.map(videoInPlaylistReducer.videos, el => (
-        <Col md="4" className="playlist-item" key={el._id}>
+        <Col md="4" className="playlist-item items-video" key={el._id}>
           <div>
+            <div className="d-flex justify-content-center align-items-center">
+              <img className="fit_img" src={thumbnail} alt="thumbnails" />
+            </div>
             <div className="playlist-title">
               {el.title}
             </div>
@@ -49,14 +52,23 @@ class VideosInPlaylist extends Component {
 
   render() {
     const { videoInPlaylistReducer } = this.props;
-    console.log(videoInPlaylistReducer);
     if (!videoInPlaylistReducer) {
       return <div>Loading...</div>;
     }
     return (
-      <div>
-        Title:
-        {this.renderVideos()}
+      <div className="playlists">
+        <div className="playlist col-md-12">
+          <div className="title">
+            <h3>
+              {videoInPlaylistReducer.title}
+              {' '}
+                Package
+            </h3>
+          </div>
+          <div className="playlist-list-videos row">
+            {this.renderVideos()}
+          </div>
+        </div>
       </div>
     );
   }
