@@ -6,17 +6,30 @@ import { Col } from 'reactstrap';
 import { fetchPlaylistWithID } from '../../actions/videosInPlaylist';
 import './index1.css';
 import thumbnail from '../../images/1.png';
+import Loading from '../Loading/loading';
 
 class VideosInPlaylist extends Component {
   constructor(props) {
     super(props);
     this.props = props;
+    this.state = {
+      isLoading: true,
+    };
   }
 
   componentWillMount() {
     const { match, fetchPlaylistWithIDAction, videoInPlaylistReducer } = this.props;
     if (!videoInPlaylistReducer.playlist) {
       fetchPlaylistWithIDAction(match.params.id);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { videoInPlaylistReducer } = this.props;
+    if (videoInPlaylistReducer !== nextProps.videoInPlaylistReducer) {
+      this.setState({
+        isLoading: false,
+      });
     }
   }
 
@@ -51,9 +64,14 @@ class VideosInPlaylist extends Component {
   }
 
   render() {
+    const { isLoading } = this.state;
     const { videoInPlaylistReducer } = this.props;
-    if (!videoInPlaylistReducer) {
-      return <div>Loading...</div>;
+    if (!videoInPlaylistReducer || isLoading) {
+      return (
+        <div className="d-flex justify-content-center align-items-center">
+          <Loading />
+        </div>
+      );
     }
     return (
       <div className="playlists">
@@ -65,9 +83,17 @@ class VideosInPlaylist extends Component {
                 Package
             </h3>
           </div>
-          <div className="playlist-list-videos row">
-            {this.renderVideos()}
-          </div>
+          { videoInPlaylistReducer.videos.length <= 0 ? (
+            <div className="mt-5 d-flex justify-content-center align-items-center">
+              <h3 className="text-light">Nothing videos to show in this Package!</h3>
+            </div>
+          )
+            : (
+              <div className="playlist-list-videos row">
+                {this.renderVideos()}
+              </div>
+            )
+          }
         </div>
       </div>
     );
