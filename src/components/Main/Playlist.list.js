@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Col, Row } from 'reactstrap';
 import { PropTypes } from 'prop-types';
-
 import { fetchPlaylist } from 'actions/playlist';
+import { ROUTE_DETAIL_PLAYLIST } from '../routes';
 
 class ListPlaylist extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class ListPlaylist extends Component {
     this.state = {
       expandPlaylist: [],
     };
-
+    this.nextPath = this.nextPath.bind(this);
     this.renderListPlaylist = this.renderListPlaylist.bind(this);
     this.togglePlaylist = this.togglePlaylist.bind(this);
   }
@@ -20,6 +20,11 @@ class ListPlaylist extends Component {
   componentDidMount() {
     const { fetchPlaylistAction } = this.props;
     fetchPlaylistAction();
+  }
+
+  nextPath(path) {
+    const { history } = this.props;
+    history.push(path);
   }
 
   togglePlaylist(playlistName) {
@@ -42,7 +47,7 @@ class ListPlaylist extends Component {
       let playlistList = <div className="playlist-empty">Nothing to show!</div>;
       if (playlists && playlists.length > 0) {
         playlistList = playlists.map(playlist => (
-          <Col md="4" className="playlist-item" key={playlist.playlist._id}>
+          <Col md="4" className="playlist-item" key={playlist.playlist._id} onClick={() => this.nextPath(`${ROUTE_DETAIL_PLAYLIST}/${playlist.playlist._id}`)}>
             <div>
               <div className="playlist-title">
                 {playlist.playlist.title}
@@ -122,6 +127,9 @@ ListPlaylist.propTypes = {
     playlist: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
   fetchPlaylistAction: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    goBack: PropTypes.func,
+  }).isRequired,
 };
 
 export default connect(mapReducerProps, actions)(ListPlaylist);
