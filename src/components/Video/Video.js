@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import _ from 'lodash';
+import { Button, Col, Row } from 'reactstrap';
 import { fetchPlaylistWithID } from '../../actions/videosInPlaylist';
+import './index.css';
 
 class VideosInPlaylist extends Component {
   constructor(props) {
@@ -22,7 +24,25 @@ class VideosInPlaylist extends Component {
     console.log(videoInPlaylistReducer);
     return (
       _.map(videoInPlaylistReducer.videos, el => (
-        <div key={el._id}>{el.title}</div>
+        <Col md="4" className="playlist-item" key={el._id}>
+          <div>
+            <div className="playlist-title">
+              {el.title}
+            </div>
+            <div className="playlist-statics">
+              <span className="playlist-views">
+                <i className="far fa-eye" />
+                {' '}
+                  500
+              </span>
+              <span className="playlist-likes">
+                <i className="far fa-heart" />
+                {' '}
+                  500
+              </span>
+            </div>
+          </div>
+        </Col>
       ))
     );
   }

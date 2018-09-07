@@ -1,0 +1,105 @@
+.playlist-empty {
+  color: #ffffff;
+  text-align: center;
+  font-size: 25px;
+  margin-top: 50px;
+  width: 100%;
+}
+
+.playlist {
+  margin: 70px auto;
+}
+
+.playlist:last-child {
+  margin-bottom: 0;
+}
+
+.playlist .playlist-list {
+  max-height: 200px;
+  transition: max-height .5s ease-in-out;
+  overflow: hidden;
+}
+
+.playlist.expand .playlist-list {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.playlist .title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.playlist .title h3 {
+  font-size: 35px;
+  color: #1795d1;
+  margin: 0;
+}
+
+.playlist .title button {
+  color: #1795d1;
+  background: transparent;
+  border: none;
+  padding: 0 12px;
+  border-radius: 13px;
+  font-size: 22px;
+  transition: all .5s ease-in-out;
+}
+
+.playlist .title button:hover {
+  background: #808080;
+  color: #ffffff;
+}
+
+.playlist .title .view-less,
+.playlist.expand .title .view-more {
+  display: none;
+}
+
+.playlist.expand .title .view-less {
+  display: block;
+}
+
+.playlist .playlist-item {
+  margin: 25px 0;
+}
+
+.playlist .playlist-item > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 150px;
+  padding: 15px 15px 5px;
+  background: #808080;
+  border-radius: 10px;
+  box-shadow: 1px 2px 18px 1px rgb(41, 41, 41);
+  cursor: pointer;
+}
+
+.playlist .playlist-item .playlist-title {
+  font-size: 30px;
+  color: #efefef;
+  border-bottom: 1px solid #b0b0b0;
+  flex: 1;
+  padding: 0 5px; 
+}
+
+.playlist .playlist-item .playlist-statics {
+  margin-top: 5px;
+  font-weight: 700;
+}
+
+.playlist .playlist-item .playlist-statics span {
+  margin-right: 10px;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.playlist .playlist-item .playlist-statics i {
+  font-size: 22px;
+  margin-right: 5px;
+}
