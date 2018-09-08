@@ -24,7 +24,10 @@ class SearchBar extends Component {
   render() {
     const { value } = this.state;
     return (
-      <input type="text" name="searchbar" value={value} onChange={this.handleChange} />
+      <div className="input_search_bar">
+        <input className="search_bar" type="text" size="60" placeholder="Search" name="searchbar" value={value} onChange={this.handleChange} />
+        <span className="icon_search_bar"><i className="fas fa-search" /></span>
+      </div>
     );
   }
 }

@@ -85,3 +85,28 @@ label.form-check-label {
   border-radius: 11px;
   box-shadow: 2px 2px 5px 0px rgb(41, 41, 41);
 }
+
+.search_bar {
+  border: 1px solid #1f0104;
+  border-radius: 14px;
+  color: rgb(221, 220, 220);
+  background-color: rgb(102, 102, 102);
+  padding: 2px;
+  outline: none;
+  padding-left: 14px;
+}
+
+.search_bar::placeholder {
+  color: rgb(161, 161, 161);
+}
+
+.input_search_bar{
+  position: relative;
+}
+
+.icon_search_bar{
+  position: absolute;
+  right: 13px;
+  top: 4px;
+}
+
