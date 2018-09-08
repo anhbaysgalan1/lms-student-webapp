@@ -4,6 +4,7 @@ import { Button, Col, Row } from 'reactstrap';
 import { PropTypes } from 'prop-types';
 import { fetchPlaylist } from 'actions/playlist';
 import { showSearchBar, hideSearchBar } from '../../actions/showSearchbar';
+import { Reset } from '../../actions/searchAction';
 import { ROUTE_DETAIL_PLAYLIST } from '../routes';
 
 class ListPlaylist extends Component {
@@ -43,8 +44,9 @@ class ListPlaylist extends Component {
   }
 
   clickToShowSearchBar() {
-    const { showSearchBarAction } = this.props;
+    const { showSearchBarAction, ResetAction } = this.props;
     showSearchBarAction();
+    ResetAction();
   }
 
   renderListPlaylist(listPlaylist) {
@@ -129,14 +131,19 @@ class ListPlaylist extends Component {
   }
 }
 
-function mapReducerProps({ playlistReducer, showSearchBarReducer }) {
-  return { playlistReducer, showSearchBarReducer };
+function mapReducerProps({ playlistReducer, showSearchBarReducer, searchReducer }) {
+  return { playlistReducer, showSearchBarReducer, searchReducer };
 }
 
 const actions = {
   fetchPlaylistAction: fetchPlaylist,
   showSearchBarAction: showSearchBar,
   hideSearchBarAction: hideSearchBar,
+  ResetAction: Reset,
+};
+
+ListPlaylist.defaultProps = {
+  searchReducer: {},
 };
 
 ListPlaylist.propTypes = {
@@ -149,6 +156,12 @@ ListPlaylist.propTypes = {
   }).isRequired,
   showSearchBarAction: PropTypes.func.isRequired,
   hideSearchBarAction: PropTypes.func.isRequired,
+  ResetAction: PropTypes.func.isRequired,
+  searchReducer: PropTypes.shape({
+    type: PropTypes.string,
+    payload: PropTypes.string,
+    queryAll: PropTypes.bool,
+  }),
 };
 
 export default connect(mapReducerProps, actions)(ListPlaylist);
