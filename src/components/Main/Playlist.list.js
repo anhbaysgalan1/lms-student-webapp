@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Col, Row } from 'reactstrap';
 import { PropTypes } from 'prop-types';
 import { fetchPlaylist } from 'actions/playlist';
+import { showSearchBar, hideSearchBar } from '../../actions/showSearchbar';
 import { ROUTE_DETAIL_PLAYLIST } from '../routes';
 
 class ListPlaylist extends Component {
@@ -15,11 +16,13 @@ class ListPlaylist extends Component {
     this.nextPath = this.nextPath.bind(this);
     this.renderListPlaylist = this.renderListPlaylist.bind(this);
     this.togglePlaylist = this.togglePlaylist.bind(this);
+    this.clickToShowSearchBar = this.clickToShowSearchBar.bind(this);
   }
 
   componentDidMount() {
-    const { fetchPlaylistAction } = this.props;
+    const { fetchPlaylistAction, hideSearchBarAction } = this.props;
     fetchPlaylistAction();
+    hideSearchBarAction();
   }
 
   nextPath(path) {
@@ -39,6 +42,11 @@ class ListPlaylist extends Component {
     this.setState({ expandPlaylist });
   }
 
+  clickToShowSearchBar() {
+    const { showSearchBarAction } = this.props;
+    showSearchBarAction();
+  }
+
   renderListPlaylist(listPlaylist) {
     const { expandPlaylist } = this.state;
 
@@ -47,7 +55,15 @@ class ListPlaylist extends Component {
       let playlistList = <div className="playlist-empty">Nothing to show!</div>;
       if (playlists && playlists.length > 0) {
         playlistList = playlists.map(playlist => (
-          <Col md="4" className="playlist-item" key={playlist.playlist._id} onClick={() => this.nextPath(`${ROUTE_DETAIL_PLAYLIST}/${playlist.playlist._id}`)}>
+          <Col
+            md="4"
+            className="playlist-item"
+            key={playlist.playlist._id}
+            onClick={() => {
+              this.nextPath(`${ROUTE_DETAIL_PLAYLIST}/${playlist.playlist._id}`);
+              this.clickToShowSearchBar();
+            }}
+          >
             <div>
               <div className="playlist-title">
                 {playlist.playlist.title}
@@ -94,7 +110,6 @@ class ListPlaylist extends Component {
   render() {
     const { playlistReducer } = this.props;
     const { playlist } = playlistReducer;
-
     if (playlist) {
       if (playlist.length === 0) {
         return (
@@ -114,12 +129,14 @@ class ListPlaylist extends Component {
   }
 }
 
-function mapReducerProps({ playlistReducer }) {
-  return { playlistReducer };
+function mapReducerProps({ playlistReducer, showSearchBarReducer }) {
+  return { playlistReducer, showSearchBarReducer };
 }
 
 const actions = {
   fetchPlaylistAction: fetchPlaylist,
+  showSearchBarAction: showSearchBar,
+  hideSearchBarAction: hideSearchBar,
 };
 
 ListPlaylist.propTypes = {
@@ -130,6 +147,8 @@ ListPlaylist.propTypes = {
   history: PropTypes.shape({
     goBack: PropTypes.func,
   }).isRequired,
+  showSearchBarAction: PropTypes.func.isRequired,
+  hideSearchBarAction: PropTypes.func.isRequired,
 };
 
 export default connect(mapReducerProps, actions)(ListPlaylist);

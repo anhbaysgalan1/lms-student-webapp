@@ -4,6 +4,7 @@ import { PropTypes } from 'prop-types';
 import _ from 'lodash';
 import { Col } from 'reactstrap';
 import { fetchPlaylistWithID } from '../../actions/videosInPlaylist';
+import { showSearchBar } from '../../actions/showSearchbar';
 import './index1.css';
 import thumbnail from '../../images/1.png';
 import Loading from '../Loading/loading';
@@ -14,27 +15,78 @@ class VideosInPlaylist extends Component {
     this.props = props;
     this.state = {
       isLoading: true,
+      timeOut: this.timeOutLoading(),
     };
   }
 
-  componentWillMount() {
-    const { match, fetchPlaylistWithIDAction, videoInPlaylistReducer } = this.props;
-    if (!videoInPlaylistReducer.playlist) {
-      fetchPlaylistWithIDAction(match.params.id);
-    }
+  componentDidMount() {
+    const {
+      match,
+      fetchPlaylistWithIDAction,
+      showSearchBarAction,
+    } = this.props;
+    showSearchBarAction();
+    fetchPlaylistWithIDAction(match.params.id);
   }
 
   componentWillReceiveProps(nextProps) {
     const { videoInPlaylistReducer } = this.props;
+    const { timeOut } = this.state;
     if (videoInPlaylistReducer !== nextProps.videoInPlaylistReducer) {
-      this.setState({
-        isLoading: false,
-      });
+      /* eslint-disable */
+      timeOut; 
+      /* eslint-enable */
     }
   }
 
+  componentWillUnmount() {
+    const { timeOut } = this.state;
+    clearTimeout(timeOut);
+  }
+
+  timeOutLoading() {
+    const timeOut = setTimeout(() => {
+      this.setState({ isLoading: false });
+    },
+    500);
+    return timeOut;
+  }
+
   renderVideos() {
-    const { videoInPlaylistReducer } = this.props;
+    const { videoInPlaylistReducer, searchReducer } = this.props;
+    if (searchReducer && !searchReducer.queryAll) {
+      const ListAfterFilter = videoInPlaylistReducer.videos.filter((el) => {
+        const title = el.title.toLowerCase().replace(' ', '');
+        const valueNeedSearch = searchReducer.payload.toLowerCase().replace(' ', '');
+        return title.includes(valueNeedSearch);
+      });
+      return (
+        _.map(ListAfterFilter, el => (
+          <Col md="4" className="playlist-item items-video" key={el._id}>
+            <div>
+              <div className="d-flex justify-content-center align-items-center">
+                <img className="fit_img" src={thumbnail} alt="thumbnails" />
+              </div>
+              <div className="playlist-title">
+                {el.title}
+              </div>
+              <div className="playlist-statics">
+                <span className="playlist-views">
+                  <i className="far fa-eye" />
+                  {' '}
+                    500
+                </span>
+                <span className="playlist-likes">
+                  <i className="far fa-heart" />
+                  {' '}
+                    500
+                </span>
+              </div>
+            </div>
+          </Col>
+        ))
+      );
+    }
     return (
       _.map(videoInPlaylistReducer.videos, el => (
         <Col md="4" className="playlist-item items-video" key={el._id}>
@@ -66,7 +118,7 @@ class VideosInPlaylist extends Component {
   render() {
     const { isLoading } = this.state;
     const { videoInPlaylistReducer } = this.props;
-    if (!videoInPlaylistReducer || isLoading) {
+    if (!videoInPlaylistReducer.videos || isLoading) {
       return (
         <div className="d-flex justify-content-center align-items-center">
           <Loading />
@@ -100,6 +152,19 @@ class VideosInPlaylist extends Component {
   }
 }
 
+function mapReducerProps({ videoInPlaylistReducer, showSearchBarReducer, searchReducer }) {
+  return { videoInPlaylistReducer, showSearchBarReducer, searchReducer };
+}
+
+const actions = {
+  fetchPlaylistWithIDAction: fetchPlaylistWithID,
+  showSearchBarAction: showSearchBar,
+};
+
+VideosInPlaylist.defaultProps = {
+  searchReducer: null,
+};
+
 VideosInPlaylist.propTypes = {
   match: PropTypes.shape({
     path: PropTypes.string,
@@ -110,18 +175,18 @@ VideosInPlaylist.propTypes = {
   history: PropTypes.shape({
     goBack: PropTypes.func,
   }).isRequired,
+
   fetchPlaylistWithIDAction: PropTypes.func.isRequired,
   videoInPlaylistReducer: PropTypes.shape({
     playlist: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
-};
 
-function mapReducerProps({ videoInPlaylistReducer }) {
-  return { videoInPlaylistReducer };
-}
-
-const actions = {
-  fetchPlaylistWithIDAction: fetchPlaylistWithID,
+  showSearchBarAction: PropTypes.func.isRequired,
+  searchReducer: PropTypes.shape({
+    type: PropTypes.string,
+    queryAll: PropTypes.bool,
+    payload: PropTypes.string,
+  }),
 };
 
 export default connect(mapReducerProps, actions)(VideosInPlaylist);

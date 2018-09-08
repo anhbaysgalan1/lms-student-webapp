@@ -4,15 +4,15 @@ import { PropTypes } from 'prop-types';
 import { Button } from 'reactstrap';
 
 import { logout } from 'actions/authAction';
-
 import mainLogo from 'images/logo/logo.png';
+import SearchBar from '../SearchBar';
+
 
 import './index.css';
 
 class NavBar extends Component {
   constructor(props) {
     super(props);
-
     this.logoutHandle = this.logoutHandle.bind(this);
   }
 
@@ -22,13 +22,15 @@ class NavBar extends Component {
   }
 
   render() {
-    const { loginReducer } = this.props;
+    const { loginReducer, showSearchBarReducer } = this.props;
     const { user } = loginReducer;
-
     return (
       <nav className="navbar">
         <div className="logo">
           <img src={mainLogo} alt="LMS logo" />
+        </div>
+        <div>
+          {showSearchBarReducer ? <SearchBar /> : ''}
         </div>
         <div className="user">
           <div className="user-avatar">
@@ -44,12 +46,16 @@ class NavBar extends Component {
   }
 }
 
-function mapReducerProps({ loginReducer }) {
-  return { loginReducer };
+function mapReducerProps({ loginReducer, showSearchBarReducer }) {
+  return { loginReducer, showSearchBarReducer };
 }
 
 const actions = {
   logoutAction: logout,
+};
+
+NavBar.defaultProps = {
+  showSearchBarReducer: null,
 };
 
 NavBar.propTypes = {
@@ -57,6 +63,7 @@ NavBar.propTypes = {
     user: PropTypes.object,
     errMsg: PropTypes.string,
   }).isRequired,
+  showSearchBarReducer: PropTypes.bool,
   logoutAction: PropTypes.func.isRequired,
 };
 
