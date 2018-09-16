@@ -89,19 +89,24 @@ class ListPlaylist extends Component {
       return (
         <Col
           md="12"
-          className={`playlist ${expandPlaylist.includes(playlistItem.classroomName) ? 'expand' : ''}`}
+          className={`playlist ${expandPlaylist.includes(playlistItem.classroomName) ? 'expand' : 'unexpand'}`}
           key={playlistItem.classroomName}
         >
           <div className="title">
             <h3>
               {playlistItem.classroomName}
             </h3>
-            <div>
-              <Button className="view-more" onClick={() => { this.togglePlaylist(playlistItem.classroomName); }}>View more packages</Button>
-              <Button className="view-less" onClick={() => { this.togglePlaylist(playlistItem.classroomName); }}>View less packages</Button>
-            </div>
+            { playlists.length > 3 ? (
+              <div>
+                <Button className="view-more" onClick={() => { this.togglePlaylist(playlistItem.classroomName); }}>View more packages</Button>
+                <Button className="view-less" onClick={() => { this.togglePlaylist(playlistItem.classroomName); }}>View less packages</Button>
+              </div>
+            ) : '' }
           </div>
-          <Row className="playlist-list">
+          <Row
+            className="playlist-list" 
+            style={{ height: playlists && playlists.length > 0 ? Math.ceil(playlists.length/3)*200 : 200 }}
+          >
             {playlistList}
           </Row>
         </Col>

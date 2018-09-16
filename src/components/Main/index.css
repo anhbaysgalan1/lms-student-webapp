@@ -15,15 +15,17 @@
 }
 
 .playlist .playlist-list {
-  max-height: 200px;
-  transition: max-height .5s ease-in-out;
+  transition: height .5s ease-in-out;
   overflow: hidden;
 }
 
-.playlist.expand .playlist-list {
-  max-height: 600px;
-  overflow-y: auto;
+.playlist.unexpand .playlist-list {
+  height: 200px !important;
 }
+
+/* .playlist.expand .playlist-list {
+  height: auto;
+} */
 
 .playlist .title {
   display: flex;
