@@ -6,7 +6,7 @@ import { Col } from 'reactstrap';
 import { fetchPlaylistWithID } from '../../actions/videosInPlaylist';
 import { showSearchBar } from '../../actions/showSearchbar';
 import './index1.css';
-import thumbnail from '../../images/1.png';
+// import thumbnail from '../../images/1.png';
 import Loading from '../Loading/loading';
 
 class VideosInPlaylist extends Component {
@@ -60,12 +60,14 @@ class VideosInPlaylist extends Component {
         const valueNeedSearch = searchReducer.payload.toLowerCase().replace(' ', '');
         return title.includes(valueNeedSearch);
       });
+      console.log(ListAfterFilter);
+      
       return (
         _.map(ListAfterFilter, el => (
           <Col md="4" className="playlist-item items-video" key={el._id}>
             <div>
               <div className="d-flex justify-content-center align-items-center">
-                <img className="fit_img" src={thumbnail} alt="thumbnails" />
+                <img className="fit_img" src={`https://i.ytimg.com/vi/${el.videoId}/mqdefault.jpg`} alt="thumbnails" />
               </div>
               <div className="playlist-title">
                 {el.title}
@@ -91,8 +93,8 @@ class VideosInPlaylist extends Component {
       _.map(videoInPlaylistReducer.videos, el => (
         <Col md="4" className="playlist-item items-video" key={el._id}>
           <div>
-            <div className="d-flex justify-content-center align-items-center">
-              <img className="fit_img" src={thumbnail} alt="thumbnails" />
+            <div className="d-flex justify-content-center">
+              <img className="fit_img" src={`https://i.ytimg.com/vi/${el.videoId}/mqdefault.jpg`} alt="thumbnails" />
             </div>
             <div className="playlist-title">
               {el.title}
