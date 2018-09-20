@@ -17,6 +17,7 @@ class VideosInPlaylist extends Component {
       isLoading: true,
       timeOut: this.timeOutLoading(),
     };
+    this.test = this.test.bind(this);
   }
 
   componentDidMount() {
@@ -52,6 +53,10 @@ class VideosInPlaylist extends Component {
     return timeOut;
   }
 
+  test(s) {
+    console.log(s);
+  }
+
   renderVideos() {
     const { videoInPlaylistReducer, searchReducer } = this.props;
     if (searchReducer && !searchReducer.queryAll) {
@@ -61,10 +66,15 @@ class VideosInPlaylist extends Component {
         return title.includes(valueNeedSearch);
       });
       console.log(ListAfterFilter);
-      
+
       return (
         _.map(ListAfterFilter, el => (
-          <Col md="4" className="playlist-item items-video" key={el._id}>
+          <Col
+            md="4"
+            className="playlist-item items-video"
+            key={el._id}
+            onClick={() => this.test}
+          >
             <div>
               <div className="d-flex justify-content-center align-items-center">
                 <img className="fit_img" src={`https://i.ytimg.com/vi/${el.videoId}/mqdefault.jpg`} alt="thumbnails" />
@@ -91,7 +101,7 @@ class VideosInPlaylist extends Component {
     }
     return (
       _.map(videoInPlaylistReducer.videos, el => (
-        <Col md="4" className="playlist-item items-video" key={el._id}>
+        <Col md="4" className="playlist-item items-video" key={el._id} onClick={() => this.test(el._id)}>
           <div>
             <div className="d-flex justify-content-center">
               <img className="fit_img" src={`https://i.ytimg.com/vi/${el.videoId}/mqdefault.jpg`} alt="thumbnails" />
