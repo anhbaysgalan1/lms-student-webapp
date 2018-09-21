@@ -7,3 +7,5 @@ export const API_URL = `${ROOT_URL}/api`;
 export const API_AUTH = `${API_URL}/auth`;
 
 export const API_PLAYLIST = `${API_URL}/playlists`;
+
+export const API_VIDEO = `${API_URL}/videos`;

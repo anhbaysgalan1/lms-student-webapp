@@ -9,6 +9,7 @@ import './index1.css';
 // import thumbnail from '../../images/1.png';
 import Loading from '../Loading/loading';
 
+
 class VideosInPlaylist extends Component {
   constructor(props) {
     super(props);
@@ -17,7 +18,7 @@ class VideosInPlaylist extends Component {
       isLoading: true,
       timeOut: this.timeOutLoading(),
     };
-    this.test = this.test.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -53,8 +54,9 @@ class VideosInPlaylist extends Component {
     return timeOut;
   }
 
-  test(s) {
-    console.log(s);
+  handleChange(video) {
+    const { history, location } = this.props;
+    history.push(`${location.pathname}/${video.videoId}`);
   }
 
   renderVideos() {
@@ -65,15 +67,13 @@ class VideosInPlaylist extends Component {
         const valueNeedSearch = searchReducer.payload.toLowerCase().replace(' ', '');
         return title.includes(valueNeedSearch);
       });
-      console.log(ListAfterFilter);
-
       return (
         _.map(ListAfterFilter, el => (
           <Col
             md="4"
             className="playlist-item items-video"
             key={el._id}
-            onClick={() => this.test}
+            onClick={() => this.handleChange(el)}
           >
             <div>
               <div className="d-flex justify-content-center align-items-center">
@@ -101,7 +101,7 @@ class VideosInPlaylist extends Component {
     }
     return (
       _.map(videoInPlaylistReducer.videos, el => (
-        <Col md="4" className="playlist-item items-video" key={el._id} onClick={() => this.test(el._id)}>
+        <Col md="4" className="playlist-item items-video" key={el._id} onClick={() => { this.handleChange(el); }}>
           <div>
             <div className="d-flex justify-content-center">
               <img className="fit_img" src={`https://i.ytimg.com/vi/${el.videoId}/mqdefault.jpg`} alt="thumbnails" />
@@ -164,8 +164,12 @@ class VideosInPlaylist extends Component {
   }
 }
 
-function mapReducerProps({ videoInPlaylistReducer, showSearchBarReducer, searchReducer }) {
-  return { videoInPlaylistReducer, showSearchBarReducer, searchReducer };
+function mapReducerProps({
+  videoInPlaylistReducer, showSearchBarReducer, searchReducer, watchvideoReducer,
+}) {
+  return {
+    videoInPlaylistReducer, showSearchBarReducer, searchReducer, watchvideoReducer,
+  };
 }
 
 const actions = {
@@ -192,7 +196,10 @@ VideosInPlaylist.propTypes = {
   videoInPlaylistReducer: PropTypes.shape({
     playlist: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
-
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+    search: PropTypes.string,
+  }).isRequired,
   showSearchBarAction: PropTypes.func.isRequired,
   searchReducer: PropTypes.shape({
     type: PropTypes.string,
