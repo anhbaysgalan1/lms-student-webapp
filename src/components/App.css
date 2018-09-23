@@ -126,9 +126,12 @@ label.form-check-label {
 }
 .color-title-videos{
   color: rgb(23, 152, 212);
+  font-size: 1.4rem;
+  margin: auto;
+  margin-left: 15px;
 }
 .related-video{
-  padding: 7px;
+  padding: 12px;
   transition: all 0.5s;
 }
 
@@ -145,4 +148,8 @@ label.form-check-label {
   border: 20px solid rgb(128, 128, 128);
   border-radius: 22px;
   box-shadow: 2px 2px 21px 2px black;
+}
+
+span.title-videos-content{
+  font-size: 22px;
 }

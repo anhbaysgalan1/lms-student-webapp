@@ -5,7 +5,6 @@ import {
 export default function (state = null, action) {
   switch (action.type) {
     case GET_CURRENT_VIDEO: {
-      console.log(action.payload.data.data);
       return action.payload.data.data;
     }
 

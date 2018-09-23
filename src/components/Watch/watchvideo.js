@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { hideSearchBar } from '../../actions/showSearchbar';
-import { fetchPlaylistWithID } from '../../actions/videosInPlaylist';
+import { fetchPlaylistWithID, getCurrentVideo, clearCurrentVideo } from '../../actions/videosInPlaylist';
 import Loading from '../Loading/loading';
 import FrameYouTube from './FrameYoutube/FrameYoutube';
 
@@ -12,44 +12,51 @@ class WatchVideo extends Component {
     super(props);
     this.props = props;
     this.state = {
-      videoId: null,
       videoActive: null,
     };
     this.renderList = this.renderList.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const {
       match,
       fetchPlaylistWithIDAction,
       hideSearchBarAction,
+      getCurrentVideoAction,
+      videoInPlaylistReducer,
     } = this.props;
-    fetchPlaylistWithIDAction(match.params.id);
+    if (_.isEqual(videoInPlaylistReducer, {})) {
+      fetchPlaylistWithIDAction(match.params.id);
+    }
     hideSearchBarAction();
-    this.setState({
-      videoId: match.params.video,
-    });
+    getCurrentVideoAction(match.params.video);
   }
 
-  handleClick(index, videoId) {
-    const { history } = this.props;
+  componentWillUnmount(){
+    console.log("Run Unmout");
+    
+  }
+
+  handleClick(index, video) {
+    const { history, getCurrentVideoAction } = this.props;
     this.setState({
       videoActive: index,
-      videoId,
     });
-    history.push(`${videoId}`);
+    getCurrentVideoAction(video._id);
+    // clearCurrentVideoAction();
+    history.push(`${video._id}`);
   }
 
   renderList() {
-    const { videoInPlaylistReducer } = this.props;
-    const { videoActive, videoId } = this.state;
+    const { videoInPlaylistReducer, currentVideoReducer } = this.props;
+    const { videoActive } = this.state;
+    const { videoId: CurrentId } = currentVideoReducer;
     if (videoInPlaylistReducer) {
       const listVideo = videoInPlaylistReducer.videos;
-      console.log(listVideo);
       return (
         _.map(listVideo, (video, index) => (
-          <div key={video._id} className="mt-3 related-video" style={{ display: videoActive === index || videoId === video.videoId ? 'none' : 'block' }} onClick={() => this.handleClick(index, video.videoId)} onKeyDown={() => {}} role="presentation">
+          <div key={video._id} className="mt-3 related-video" style={{ display: videoActive === index || CurrentId === video.videoId ? 'none' : 'block' }} onClick={() => this.handleClick(index, video)} onKeyDown={() => {}} role="presentation">
             <img alt="thumbnails" className="img_watchvideo" src={`https://i.ytimg.com/vi/${video.videoId}/mqdefault.jpg`} />
             {' '}
             <span className="text-light">{video.title}</span>
@@ -62,16 +69,17 @@ class WatchVideo extends Component {
   }
 
   render() {
-    const { videoId, currentVideo } = this.state;
-    const { videoInPlaylistReducer } = this.props;
-    if (!videoInPlaylistReducer) {
+    console.log("asdasdasd");
+    
+    const { videoInPlaylistReducer, currentVideoReducer } = this.props;
+    if (!videoInPlaylistReducer && !currentVideoReducer) {
       return (
         <Loading />
       );
     }
     return (
       <div id="watchVideo">
-        <FrameYouTube videoId={videoId} video={currentVideo} />
+        <FrameYouTube {...this.props} currentVideoReducer={currentVideoReducer} />
         <div>
           <p className="color-title-videos">Related videos</p>
           <div className="d-flex justify-content-end flex-column">
@@ -85,6 +93,7 @@ class WatchVideo extends Component {
 
 WatchVideo.defaultProps = {
   videoInPlaylistReducer: null,
+  currentVideoReducer: null,
 };
 
 WatchVideo.propTypes = {
@@ -99,17 +108,24 @@ WatchVideo.propTypes = {
   videoInPlaylistReducer: PropTypes.shape({
     videos: PropTypes.arrayOf(PropTypes.object),
   }),
+  getCurrentVideoAction: PropTypes.func.isRequired,
   hideSearchBarAction: PropTypes.func.isRequired,
   fetchPlaylistWithIDAction: PropTypes.func.isRequired,
+  currentVideoReducer: PropTypes.shape({
+    title: PropTypes.string,
+    videoId: PropTypes.string,
+  }),
 };
 
 const actions = {
   hideSearchBarAction: hideSearchBar,
   fetchPlaylistWithIDAction: fetchPlaylistWithID,
+  getCurrentVideoAction: getCurrentVideo,
+  clearCurrentVideoAction: clearCurrentVideo,
 };
 
-function mapReducerProps({ showSearchBarReducer, videoInPlaylistReducer }) {
-  return { showSearchBarReducer, videoInPlaylistReducer };
+function mapReducerProps({ showSearchBarReducer, videoInPlaylistReducer, currentVideoReducer }) {
+  return { showSearchBarReducer, videoInPlaylistReducer, currentVideoReducer };
 }
 
 

@@ -13,7 +13,7 @@ import WatchVideo from '../Watch/watchvideo';
 
 export default function Main() {
   return (
-    <Container className="main-content">
+    <Container fluid className="main-content">
       <NavBar />
       <Switch>
         <Route

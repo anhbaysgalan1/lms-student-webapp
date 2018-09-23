@@ -56,7 +56,7 @@ class VideosInPlaylist extends Component {
 
   handleChange(video) {
     const { history, location } = this.props;
-    history.push(`${location.pathname}/${video.videoId}`);
+    history.push(`${location.pathname}/${video._id}`);
   }
 
   renderVideos() {

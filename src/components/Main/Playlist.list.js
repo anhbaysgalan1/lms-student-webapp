@@ -104,8 +104,8 @@ class ListPlaylist extends Component {
             ) : '' }
           </div>
           <Row
-            className="playlist-list" 
-            style={{ height: playlists && playlists.length > 0 ? Math.ceil(playlists.length/3)*200 : 200 }}
+            className="playlist-list"
+            style={{ height: playlists && playlists.length > 0 ? Math.ceil(playlists.length / 3) * 200 : 200 }}
           >
             {playlistList}
           </Row>
