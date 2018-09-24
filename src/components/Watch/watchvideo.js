@@ -30,12 +30,13 @@ class WatchVideo extends Component {
       fetchPlaylistWithIDAction(match.params.id);
     }
     hideSearchBarAction();
+    console.log(match.params.video);
+    
     getCurrentVideoAction(match.params.video);
   }
 
-  componentWillUnmount(){
-    console.log("Run Unmout");
-    
+  componentWillUnmount() {
+    console.log('Run Unmout');
   }
 
   handleClick(index, video) {
@@ -69,17 +70,25 @@ class WatchVideo extends Component {
   }
 
   render() {
-    console.log("asdasdasd");
-    
-    const { videoInPlaylistReducer, currentVideoReducer } = this.props;
-    if (!videoInPlaylistReducer && !currentVideoReducer) {
+    const { videoInPlaylistReducer, currentVideoReducer, getCurrentVideoAction } = this.props;
+    if (_.isEqual(videoInPlaylistReducer, {}) && _.isEqual(currentVideoReducer, {})) {
       return (
-        <Loading />
+        <div className="d-flex justify-content-center">
+          <Loading />
+        </div>
       );
+    }
+    const countLike = _.isEqual(currentVideoReducer.like, []) ? 0 : currentVideoReducer.like.length;
+    const CurrentUserID = this.props.loginReducer.user.id;
+    let sttLike;
+    if (currentVideoReducer.like.includes(CurrentUserID)) {
+      sttLike = true;
+    } else {
+      sttLike = false;
     }
     return (
       <div id="watchVideo">
-        <FrameYouTube {...this.props} currentVideoReducer={currentVideoReducer} />
+        <FrameYouTube {...this.props} sttLike={sttLike} countLike={countLike} currentVideoReducer={currentVideoReducer} currentUser={this.props.loginReducer} getCurrentVideoAction={getCurrentVideoAction} />
         <div>
           <p className="color-title-videos">Related videos</p>
           <div className="d-flex justify-content-end flex-column">
@@ -124,8 +133,12 @@ const actions = {
   clearCurrentVideoAction: clearCurrentVideo,
 };
 
-function mapReducerProps({ showSearchBarReducer, videoInPlaylistReducer, currentVideoReducer }) {
-  return { showSearchBarReducer, videoInPlaylistReducer, currentVideoReducer };
+function mapReducerProps({
+  showSearchBarReducer, videoInPlaylistReducer, currentVideoReducer, loginReducer,
+}) {
+  return {
+    showSearchBarReducer, videoInPlaylistReducer, currentVideoReducer, loginReducer,
+  };
 }
 
 
