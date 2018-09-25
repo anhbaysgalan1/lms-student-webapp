@@ -9,7 +9,7 @@ import {
   Button,
   FormFeedback,
 } from 'reactstrap';
-import mainLogo from 'images/logo/logo.png';
+// import mainLogo from 'images/logo/logo.png';
 import { login } from '../../actions/authAction';
 
 class Login extends Component {
@@ -90,7 +90,7 @@ class Login extends Component {
       <div className="w-100 h-100 d-flex justify-content-center align-items-center bg-login">
         <div className="form-login">
           <div className="w-100 h-50 d-flex justify-content-center align-items-center">
-            <img src={mainLogo} alt="mainLogo" />
+            <img src="/images/logo/logo.png" alt="LMS logo" />
           </div>
           <div className="w-100 h-50">
             <Form onSubmit={this.onSubmit}>
