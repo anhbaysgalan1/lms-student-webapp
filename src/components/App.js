@@ -7,6 +7,7 @@ import { checkAuth, logout, loginRemember } from 'actions/authAction';
 
 import Login from './Login';
 import Main from './Main';
+import MainTeacher from './Teacher/Main';
 import './App.css';
 
 class App extends Component {
@@ -50,12 +51,7 @@ class App extends Component {
     if ((user && autoLogin) || user) {
       if (user.role === 0) return <Main />;
       return (
-        <div>
-          You havent permission to access this website!
-          <button className="ml-2" type="button" onClick={this.logoutHandle}>
-            Logout?
-          </button>
-        </div>
+        <MainTeacher />
       );
     }
     return <Login />;
