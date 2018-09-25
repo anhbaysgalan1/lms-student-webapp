@@ -49,10 +49,71 @@ class ListPlaylist extends Component {
     ResetAction();
   }
 
-  renderListPlaylist(listPlaylist) {
+  renderListPlaylist(listPlaylist, personalPlaylists) {
+    const { loginReducer } = this.props;
+    const { user } = loginReducer;
     const { expandPlaylist } = this.state;
+    
+    let personalPlaylistElem = '';
 
-    return listPlaylist.map((playlistItem) => {
+    if(personalPlaylists && personalPlaylists.length > 0) {
+      const personalPlaylistList = personalPlaylists.map(playlist => (
+        <Col
+          md="4"
+          className="playlist-item"
+          key={playlist.playlist._id}
+          onClick={() => {
+            this.nextPath(`${ROUTE_DETAIL_PLAYLIST}/${playlist.playlist._id}`);
+            this.clickToShowSearchBar();
+          }}
+        >
+          <div>
+            <div className="playlist-title">
+              {playlist.playlist.title}
+            </div>
+            <div className="playlist-statics">
+              <span className="playlist-views">
+                <i className="far fa-eye" />
+                {' '}
+                500
+              </span>
+              <span className="playlist-likes">
+                <i className="far fa-heart" />
+                {' '}
+                500
+              </span>
+            </div>
+          </div>
+        </Col>
+      ));
+      personalPlaylistElem = (
+        <Col
+          md="12"
+          className={`playlist ${expandPlaylist.includes('personalPlaylist') ? 'expand' : 'unexpand'}`}
+          key="personalPlaylist"
+        >
+          <div className="title">
+            <h3>
+              For you
+            </h3>
+            { personalPlaylists.length > 3 ? (
+              <div>
+                <Button className="view-more" onClick={() => { this.togglePlaylist('personalPlaylist'); }}>View more packages</Button>
+                <Button className="view-less" onClick={() => { this.togglePlaylist('personalPlaylist'); }}>View less packages</Button>
+              </div>
+            ) : '' }
+          </div>
+          <Row
+            className="playlist-list" 
+            style={{ height: personalPlaylists && personalPlaylists.length > 0 ? Math.ceil(personalPlaylists.length/3)*200 : 200 }}
+          >
+            {personalPlaylistList}
+          </Row>
+        </Col>
+      );
+    }
+
+    const listPlaylistElem = listPlaylist.map((playlistItem) => {
       const { playlists } = playlistItem;
       let playlistList = <div className="playlist-empty">Nothing to show!</div>;
       if (playlists && playlists.length > 0) {
@@ -112,11 +173,19 @@ class ListPlaylist extends Component {
         </Col>
       );
     });
+
+    return (
+      <div>
+        {personalPlaylistElem}
+        {listPlaylistElem}
+      </div>
+    )
   }
 
   render() {
     const { playlistReducer } = this.props;
-    const { playlist } = playlistReducer;
+    const { playlist, personalPlaylists } = playlistReducer;
+
     if (playlist) {
       if (playlist.length === 0) {
         return (
@@ -125,7 +194,7 @@ class ListPlaylist extends Component {
       }
       return (
         <div className="playlists">
-          {this.renderListPlaylist(playlist)}
+          {this.renderListPlaylist(playlist, personalPlaylists)}
         </div>
       );
     }
@@ -136,8 +205,8 @@ class ListPlaylist extends Component {
   }
 }
 
-function mapReducerProps({ playlistReducer, showSearchBarReducer, searchReducer }) {
-  return { playlistReducer, showSearchBarReducer, searchReducer };
+function mapReducerProps({ loginReducer, playlistReducer, showSearchBarReducer, searchReducer }) {
+  return { loginReducer, playlistReducer, showSearchBarReducer, searchReducer };
 }
 
 const actions = {
@@ -167,6 +236,10 @@ ListPlaylist.propTypes = {
     payload: PropTypes.string,
     queryAll: PropTypes.bool,
   }),
+  loginReducer: PropTypes.shape({
+    user: PropTypes.object,
+    errMsg: PropTypes.string,
+  }).isRequired,
 };
 
 export default connect(mapReducerProps, actions)(ListPlaylist);

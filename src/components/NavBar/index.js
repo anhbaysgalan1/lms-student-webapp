@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { Button } from 'reactstrap';
@@ -27,7 +28,9 @@ class NavBar extends Component {
     return (
       <nav className="navbar">
         <div className="logo">
-          <img src={mainLogo} alt="LMS logo" />
+          <Link to="/">
+            <img src={mainLogo} alt="LMS logo" />
+          </Link>
         </div>
         <div>
           {showSearchBarReducer ? <SearchBar /> : ''}
