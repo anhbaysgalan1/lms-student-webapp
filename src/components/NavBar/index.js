@@ -5,7 +5,7 @@ import { PropTypes } from 'prop-types';
 import { Button } from 'reactstrap';
 
 import { logout } from 'actions/authAction';
-import mainLogo from 'images/logo/logo.png';
+// import mainLogo from 'images/logo/logo.png';
 import SearchBar from '../SearchBar';
 
 
@@ -29,7 +29,7 @@ class NavBar extends Component {
       <nav className="navbar">
         <div className="logo">
           <Link to="/">
-            <img src={mainLogo} alt="LMS logo" />
+            <img src="/images/logo/logo.png" alt="LMS logo" />
           </Link>
         </div>
         <div>
