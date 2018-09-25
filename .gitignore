@@ -2,6 +2,7 @@
 node_modules
 npm-debug.log
 .vscode/
-src/images/*
+src/images/*.png
+src/images/logo/*.png
 public/fonts/
 build
