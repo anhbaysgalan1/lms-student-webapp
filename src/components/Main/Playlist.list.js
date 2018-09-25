@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Col, Row, Container } from 'reactstrap';
+import {
+  Button,
+  Col,
+  Row,
+  Container,
+} from 'reactstrap';
 import { PropTypes } from 'prop-types';
 import { fetchPlaylist } from 'actions/playlist';
 import { showSearchBar, hideSearchBar } from '../../actions/showSearchbar';
@@ -53,10 +58,8 @@ class ListPlaylist extends Component {
     const { loginReducer } = this.props;
     const { user } = loginReducer;
     const { expandPlaylist } = this.state;
-    
     let personalPlaylistElem = '';
-
-    if(personalPlaylists && personalPlaylists.length > 0) {
+    if (personalPlaylists && personalPlaylists.length > 0) {
       const personalPlaylistList = personalPlaylists.map(playlist => (
         <Col
           md="4"
@@ -104,8 +107,8 @@ class ListPlaylist extends Component {
             ) : '' }
           </div>
           <Row
-            className="playlist-list" 
-            style={{ height: personalPlaylists && personalPlaylists.length > 0 ? Math.ceil(personalPlaylists.length/3)*200 : 200 }}
+            className="playlist-list"
+            style={{ height: personalPlaylists && personalPlaylists.length > 0 ? Math.ceil(personalPlaylists.length / 3) * 200 : 200 }}
           >
             {personalPlaylistList}
           </Row>
@@ -179,7 +182,7 @@ class ListPlaylist extends Component {
         {personalPlaylistElem}
         {listPlaylistElem}
       </div>
-    )
+    );
   }
 
   render() {
@@ -205,8 +208,12 @@ class ListPlaylist extends Component {
   }
 }
 
-function mapReducerProps({ loginReducer, playlistReducer, showSearchBarReducer, searchReducer }) {
-  return { loginReducer, playlistReducer, showSearchBarReducer, searchReducer };
+function mapReducerProps({
+  loginReducer, playlistReducer, showSearchBarReducer, searchReducer,
+}) {
+  return {
+    loginReducer, playlistReducer, showSearchBarReducer, searchReducer,
+  };
 }
 
 const actions = {

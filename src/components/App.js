@@ -7,7 +7,6 @@ import { checkAuth, logout, loginRemember } from 'actions/authAction';
 
 import Login from './Login';
 import Main from './Main';
-import MainTeacher from './Teacher/Main';
 import './App.css';
 
 class App extends Component {
@@ -49,9 +48,8 @@ class App extends Component {
     const { user } = loginReducer;
 
     if ((user && autoLogin) || user) {
-      if (user.role === 0) return <Main />;
       return (
-        <MainTeacher />
+        <Main />
       );
     }
     return <Login />;
