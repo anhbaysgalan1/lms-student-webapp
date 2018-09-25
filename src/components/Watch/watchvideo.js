@@ -30,13 +30,7 @@ class WatchVideo extends Component {
       fetchPlaylistWithIDAction(match.params.id);
     }
     hideSearchBarAction();
-    console.log(match.params.video);
-    
     getCurrentVideoAction(match.params.video);
-  }
-
-  componentWillUnmount() {
-    console.log('Run Unmout');
   }
 
   handleClick(index, video) {
@@ -71,7 +65,8 @@ class WatchVideo extends Component {
 
   render() {
     const { videoInPlaylistReducer, currentVideoReducer, getCurrentVideoAction } = this.props;
-    if (_.isEqual(videoInPlaylistReducer, {}) && _.isEqual(currentVideoReducer, {})) {
+    if ((_.isEqual(videoInPlaylistReducer, {}) && _.isEqual(currentVideoReducer, {}))
+    || !currentVideoReducer.like) {
       return (
         <div className="d-flex justify-content-center">
           <Loading />
