@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import _ from 'lodash';
+import axios from 'axios';
 import { Col } from 'reactstrap';
 import { fetchPlaylistWithID } from '../../actions/videosInPlaylist';
 import { showSearchBar } from '../../actions/showSearchbar';
+import { API_VIDEO } from '../../statics/urls';
 import './index1.css';
 // import thumbnail from '../../images/1.png';
 import Loading from '../Loading/loading';
@@ -56,6 +58,8 @@ class VideosInPlaylist extends Component {
 
   handleChange(video) {
     const { history, location } = this.props;
+    video.viewCount += 1;
+    axios.put(`${API_VIDEO}/${video._id}`, video);
     history.push(`${location.pathname}/${video._id}`);
   }
 
@@ -86,12 +90,12 @@ class VideosInPlaylist extends Component {
                 <span className="playlist-views">
                   <i className="far fa-eye" />
                   {' '}
-                    500
+                  {el.viewCount}
                 </span>
                 <span className="playlist-likes">
                   <i className="far fa-heart" />
                   {' '}
-                    500
+                  { _.isEqual(el.like, []) ? 0 : el.like.length }
                 </span>
               </div>
             </div>
@@ -113,12 +117,12 @@ class VideosInPlaylist extends Component {
               <span className="playlist-views">
                 <i className="far fa-eye" />
                 {' '}
-                  500
+                {el.viewCount}
               </span>
               <span className="playlist-likes">
                 <i className="far fa-heart" />
                 {' '}
-                  500
+                { _.isEqual(el.like, []) ? 0 : el.like.length }
               </span>
             </div>
           </div>

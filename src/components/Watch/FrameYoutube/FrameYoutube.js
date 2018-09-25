@@ -2,28 +2,36 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import axios from 'axios';
+import { API_VIDEO } from '../../../statics/urls';
 import { getCurrentVideo } from '../../../actions/videosInPlaylist';
 import Loading from '../../Loading/loading';
 
 class FrameYouTube extends Component {
   constructor(props) {
     super(props);
-    const { currentVideoReducer } = this.props;
+    const {
+      currentVideoReducer,
+      sttLike,
+      countLike,
+      viewCount,
+    } = this.props;
     this.state = {
       currentVideoReducer,
-      sttLike: this.props.sttLike,
-      countLike: this.props.countLike,
+      sttLike,
+      countLike,
+      viewCount,
     };
     this.handleLike = this.handleLike.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     const { currentVideoReducer } = this.props;
-    if (currentVideoReducer !== nextProps.currentVideoReducer) {
+    if (!_.isEqual(currentVideoReducer, nextProps.currentVideoReducer)) {
       this.setState({
         currentVideoReducer: nextProps.currentVideoReducer,
         sttLike: nextProps.sttLike,
         countLike: nextProps.countLike,
+        viewCount: nextProps.viewCount,
       });
     }
   }
@@ -45,13 +53,19 @@ class FrameYouTube extends Component {
         countLike: countLike + 1,
       });
     }
-    axios.put(`http://localhost:9000/api/videos/${currentVideoReducer._id}`, currentVideoReducer);
+    axios.put(`${API_VIDEO}/${currentVideoReducer._id}`, currentVideoReducer);
   }
 
   render() {
-    const { currentVideoReducer, countLike, sttLike } = this.state;
+    const {
+      currentVideoReducer,
+      countLike,
+      sttLike,
+      viewCount,
+    } = this.state;
+    // console.log(isLoading);
     if (_.isEqual(currentVideoReducer, {})) {
-      return <Loading />;
+      return <div id="frameVideoLoading"><Loading /></div>;
     }
     return (
       <div id="frameVideo">
@@ -61,7 +75,8 @@ class FrameYouTube extends Component {
           height="600"
           allowFullScreen
           frameBorder="0"
-          src={`https://www.youtube.com/embed/${currentVideoReducer.videoId}?rel=0`}
+          allow="autoplay; encrypted-media"
+          src={`https://www.youtube.com/embed/${currentVideoReducer.videoId}?rel=0&autoplay=1`}
         />
         <div>
           <div key={currentVideoReducer._id} className="d-flex justify-content-between align-items-center">
@@ -77,7 +92,7 @@ class FrameYouTube extends Component {
               <span>
                 <i className="far fa-eye" />
                 {' '}
-                {currentVideoReducer.viewCount}
+                {viewCount}
               </span>
               <div className=" btn-like ml-2 d-inline-block" onClick={() => { this.handleLike(); }} onKeyDown={() => {}} role="presentation">
                 <span>

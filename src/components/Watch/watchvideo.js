@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import axios from 'axios';
 import { hideSearchBar } from '../../actions/showSearchbar';
 import { fetchPlaylistWithID, getCurrentVideo, clearCurrentVideo } from '../../actions/videosInPlaylist';
+import { API_VIDEO } from '../../statics/urls';
 import Loading from '../Loading/loading';
 import FrameYouTube from './FrameYoutube/FrameYoutube';
 
@@ -13,12 +15,13 @@ class WatchVideo extends Component {
     this.props = props;
     this.state = {
       videoActive: null,
+      isLoading: false,
     };
     this.renderList = this.renderList.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {
       match,
       fetchPlaylistWithIDAction,
@@ -33,13 +36,29 @@ class WatchVideo extends Component {
     getCurrentVideoAction(match.params.video);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { getCurrentVideoAction, currentVideoReducer, match } = this.props;
+    if (!_.isEqual(nextProps.currentVideoReducer, currentVideoReducer)) {
+      getCurrentVideoAction(match.params.video);
+      this.setState({
+        isLoading: true,
+      });
+    } else {
+      this.setState({
+        isLoading: false,
+      });
+    }
+  }
+
   handleClick(index, video) {
-    const { history, getCurrentVideoAction } = this.props;
+    const { history, getCurrentVideoAction, currentVideoReducer } = this.props;
     this.setState({
       videoActive: index,
     });
     getCurrentVideoAction(video._id);
     // clearCurrentVideoAction();
+    video.viewCount += 1;
+    axios.put(`${API_VIDEO}/${video._id}`, video);
     history.push(`${video._id}`);
   }
 
@@ -65,6 +84,7 @@ class WatchVideo extends Component {
 
   render() {
     const { videoInPlaylistReducer, currentVideoReducer, getCurrentVideoAction } = this.props;
+    const { isLoading } = this.state;
     if ((_.isEqual(videoInPlaylistReducer, {}) && _.isEqual(currentVideoReducer, {}))
     || !currentVideoReducer.like) {
       return (
@@ -75,15 +95,27 @@ class WatchVideo extends Component {
     }
     const countLike = _.isEqual(currentVideoReducer.like, []) ? 0 : currentVideoReducer.like.length;
     const CurrentUserID = this.props.loginReducer.user.id;
+    const { viewCount } = currentVideoReducer;
     let sttLike;
     if (currentVideoReducer.like.includes(CurrentUserID)) {
       sttLike = true;
     } else {
       sttLike = false;
     }
+    console.log(isLoading);
+    
     return (
       <div id="watchVideo">
-        <FrameYouTube {...this.props} sttLike={sttLike} countLike={countLike} currentVideoReducer={currentVideoReducer} currentUser={this.props.loginReducer} getCurrentVideoAction={getCurrentVideoAction} />
+        <FrameYouTube
+          {...this.props}
+          isLoading={isLoading}
+          viewCount={viewCount}
+          sttLike={sttLike}
+          countLike={countLike}
+          currentVideoReducer={currentVideoReducer}
+          currentUser={this.props.loginReducer}
+          getCurrentVideoAction={getCurrentVideoAction}
+        />
         <div>
           <p className="color-title-videos">Related videos</p>
           <div className="d-flex justify-content-end flex-column">
