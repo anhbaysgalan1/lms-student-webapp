@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import _ from 'lodash';
 import axios from 'axios';
-import { Col } from 'reactstrap';
+import { Col, Container } from 'reactstrap';
 import { fetchPlaylistWithID } from '../../actions/videosInPlaylist';
 import { showSearchBar } from '../../actions/showSearchbar';
 import { API_VIDEO } from '../../statics/urls';
@@ -142,28 +142,30 @@ class VideosInPlaylist extends Component {
       );
     }
     return (
-      <div className="playlists">
-        <div className="playlist col-md-12">
-          <div className="title">
-            <h3>
-              {videoInPlaylistReducer.title}
-              {' '}
-                Package
-            </h3>
-          </div>
-          { videoInPlaylistReducer.videos.length <= 0 ? (
-            <div className="mt-5 d-flex justify-content-center align-items-center">
-              <h3 className="text-light">Nothing videos to show in this Package!</h3>
+      <Container>
+        <div className="playlists">
+          <div className="playlist col-md-12">
+            <div className="title">
+              <h3>
+                {videoInPlaylistReducer.title}
+                {' '}
+                  Package
+              </h3>
             </div>
-          )
-            : (
-              <div className="playlist-list-videos row">
-                {this.renderVideos()}
+            { videoInPlaylistReducer.videos.length <= 0 ? (
+              <div className="mt-5 d-flex justify-content-center align-items-center">
+                <h3 className="text-light">Nothing videos to show in this Package!</h3>
               </div>
             )
-          }
+              : (
+                <div className="playlist-list-videos row">
+                  {this.renderVideos()}
+                </div>
+              )
+            }
+          </div>
         </div>
-      </div>
+      </Container>
     );
   }
 }

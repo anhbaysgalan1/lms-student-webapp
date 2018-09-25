@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Col, Row } from 'reactstrap';
+import { Button, Col, Row, Container } from 'reactstrap';
 import { PropTypes } from 'prop-types';
 import { fetchPlaylist } from 'actions/playlist';
 import { showSearchBar, hideSearchBar } from '../../actions/showSearchbar';
@@ -189,13 +189,13 @@ class ListPlaylist extends Component {
     if (playlist) {
       if (playlist.length === 0) {
         return (
-          <div className="playlist-empty">Nothing to show!</div>
+          <Container className="playlist-empty">Nothing to show!</Container>
         );
       }
       return (
-        <div className="playlists">
+        <Container className="playlists">
           {this.renderListPlaylist(playlist, personalPlaylists)}
-        </div>
+        </Container>
       );
     }
 
