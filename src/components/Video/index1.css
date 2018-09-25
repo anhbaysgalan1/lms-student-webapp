@@ -1,0 +1,9 @@
+.fit_img {
+  /* max-width: 250px;
+  max-height: 80px; */
+  width: 100%;
+}
+
+.playlist .playlist-item.items-video > div {
+  height: auto !important;
+}
