@@ -68,7 +68,7 @@ class FrameYouTube extends Component {
       return <div id="frameVideoLoading"><Loading /></div>;
     }
     return (
-      <div id="frameVideo">
+      <div id="frameVideo" className="sticky-top">
         <iframe
           title="Video"
           width="860"
