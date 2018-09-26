@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import axios from 'axios';
 import { API_VIDEO } from '../../../statics/urls';
-import { getCurrentVideo } from '../../../actions/videosInPlaylist';
+// import { getCurrentVideo } from '../../../actions/videosInPlaylist';
 import Loading from '../../Loading/loading';
 
 class FrameYouTube extends Component {
@@ -68,7 +68,7 @@ class FrameYouTube extends Component {
       return <div id="frameVideoLoading"><Loading /></div>;
     }
     return (
-      <div id="frameVideo" className="sticky-top">
+      <div id="frameVideo" className="sticky-top mt-3">
         <iframe
           title="Video"
           width="860"
@@ -114,6 +114,15 @@ FrameYouTube.propTypes = {
   currentVideoReducer: PropTypes.shape({
     videoId: PropTypes.string,
   }).isRequired,
+  currentUser: PropTypes.shape({
+    user: PropTypes.shape({
+      username: PropTypes.string,
+      role: PropTypes.number,
+    }),
+  }).isRequired,
+  sttLike: PropTypes.bool.isRequired,
+  viewCount: PropTypes.number.isRequired,
+  countLike: PropTypes.number.isRequired,
 };
 
 

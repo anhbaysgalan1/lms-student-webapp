@@ -68,9 +68,10 @@ class WatchVideo extends Component {
     const { videoId: CurrentId } = currentVideoReducer;
     if (videoInPlaylistReducer) {
       const listVideo = videoInPlaylistReducer.videos;
+      // style={{ display: videoActive === index || CurrentId === video.videoId ? 'none' : 'block' }}
       return (
         _.map(listVideo, (video, index) => (
-          <div key={video._id} className="mt-3 related-video" style={{ display: videoActive === index || CurrentId === video.videoId ? 'none' : 'block' }} onClick={() => this.handleClick(index, video)} onKeyDown={() => {}} role="presentation">
+          <div key={video._id} className={videoActive === index || CurrentId === video.videoId ? 'currentVideo mt-3' : 'mt-3 related-video'} onClick={() => this.handleClick(index, video)} onKeyDown={() => {}} role="presentation">
             <img alt="thumbnails" className="img_watchvideo" src={`https://i.ytimg.com/vi/${video.videoId}/mqdefault.jpg`} />
             {' '}
             <span className="text-light">{video.title}</span>
@@ -102,8 +103,6 @@ class WatchVideo extends Component {
     } else {
       sttLike = false;
     }
-    console.log(isLoading);
-    
     return (
       <div id="watchVideo">
         <FrameYouTube

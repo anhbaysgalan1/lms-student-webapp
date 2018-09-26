@@ -142,6 +142,14 @@ label.form-check-label {
   border-radius: 12px;
 }
 
+.currentVideo {
+  padding: 12px;
+  transform: scale(1.05);
+  cursor: pointer;
+  background-color: rgb(151, 150, 150);
+  border-radius: 12px;
+}
+
 #frameVideo{
   height: 100%;
   background-color: rgb(128, 128, 128);
