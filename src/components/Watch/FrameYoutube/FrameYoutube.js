@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import axios from 'axios';
+import YouTube from 'react-youtube';
 import { API_VIDEO } from '../../../statics/urls';
 // import { getCurrentVideo } from '../../../actions/videosInPlaylist';
 import Loading from '../../Loading/loading';
@@ -63,20 +64,24 @@ class FrameYouTube extends Component {
       sttLike,
       viewCount,
     } = this.state;
-    // console.log(isLoading);
+    const { onEnd } = this.props;
+    const opts = {
+      height: '600',
+      width: '860',
+      playerVars: { // https://developers.google.com/youtube/player_parameters
+        autoplay: 1,
+        rel: 0,
+      },
+    };
     if (_.isEqual(currentVideoReducer, {})) {
       return <div id="frameVideoLoading"><Loading /></div>;
     }
     return (
       <div id="frameVideo" className="sticky-top mt-3">
-        <iframe
-          title="Video"
-          width="860"
-          height="600"
-          allowFullScreen
-          frameBorder="0"
-          allow="autoplay; encrypted-media"
-          src={`https://www.youtube.com/embed/${currentVideoReducer.videoId}?rel=0&autoplay=1`}
+        <YouTube
+          opts={opts}
+          videoId={currentVideoReducer.videoId}
+          onEnd={onEnd}
         />
         <div>
           <div key={currentVideoReducer._id} className="d-flex justify-content-between align-items-center">
