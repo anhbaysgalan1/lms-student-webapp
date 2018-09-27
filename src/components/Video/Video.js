@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import _ from 'lodash';
-import axios from 'axios';
 import { Col, Container } from 'reactstrap';
 import { fetchPlaylistWithID } from '../../actions/videosInPlaylist';
 import { showSearchBar } from '../../actions/showSearchbar';
-import { API_VIDEO } from '../../statics/urls';
 import './index1.css';
 // import thumbnail from '../../images/1.png';
 import Loading from '../Loading/loading';
@@ -58,8 +56,6 @@ class VideosInPlaylist extends Component {
 
   handleChange(video) {
     const { history, location } = this.props;
-    video.viewCount += 1;
-    axios.put(`${API_VIDEO}/${video._id}`, video);
     history.push(`${location.pathname}/${video._id}`);
   }
 

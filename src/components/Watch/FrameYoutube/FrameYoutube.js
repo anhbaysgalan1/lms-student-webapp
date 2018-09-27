@@ -64,10 +64,8 @@ class FrameYouTube extends Component {
       sttLike,
       viewCount,
     } = this.state;
-    const { onEnd } = this.props;
+    const { onEnd, onPlay } = this.props;
     const opts = {
-      height: '600',
-      width: '860',
       playerVars: { // https://developers.google.com/youtube/player_parameters
         autoplay: 1,
         rel: 0,
@@ -78,11 +76,14 @@ class FrameYouTube extends Component {
     }
     return (
       <div id="frameVideo" className="sticky-top mt-3">
-        <YouTube
-          opts={opts}
-          videoId={currentVideoReducer.videoId}
-          onEnd={onEnd}
-        />
+        <div className="embed-responsive embed-responsive-16by9">
+          <YouTube
+            opts={opts}
+            videoId={currentVideoReducer.videoId}
+            onEnd={onEnd}
+            onPlay={onPlay}
+          />
+        </div>
         <div>
           <div key={currentVideoReducer._id} className="d-flex justify-content-between align-items-center">
             {/*  */}
@@ -128,6 +129,8 @@ FrameYouTube.propTypes = {
   sttLike: PropTypes.bool.isRequired,
   viewCount: PropTypes.number.isRequired,
   countLike: PropTypes.number.isRequired,
+  onPlay: PropTypes.func.isRequired,
+  onEnd: PropTypes.func.isRequired,
 };
 
 

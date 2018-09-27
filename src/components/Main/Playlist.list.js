@@ -55,8 +55,6 @@ class ListPlaylist extends Component {
   }
 
   renderListPlaylist(listPlaylist, personalPlaylists) {
-    const { loginReducer } = this.props;
-    const { user } = loginReducer;
     const { expandPlaylist } = this.state;
     let personalPlaylistElem = '';
     if (personalPlaylists && personalPlaylists.length > 0) {
@@ -108,7 +106,10 @@ class ListPlaylist extends Component {
           </div>
           <Row
             className="playlist-list"
-            style={{ height: personalPlaylists && personalPlaylists.length > 0 ? Math.ceil(personalPlaylists.length / 3) * 200 : 200 }}
+            style={{
+              height: personalPlaylists && personalPlaylists.length > 0
+                ? Math.ceil(personalPlaylists.length / 3) * 200 : 200,
+            }}
           >
             {personalPlaylistList}
           </Row>
@@ -169,7 +170,10 @@ class ListPlaylist extends Component {
           </div>
           <Row
             className="playlist-list"
-            style={{ height: playlists && playlists.length > 0 ? Math.ceil(playlists.length / 3) * 200 : 200 }}
+            style={{
+              height: playlists && playlists.length > 0
+                ? Math.ceil(playlists.length / 3) * 200 : 200,
+            }}
           >
             {playlistList}
           </Row>
