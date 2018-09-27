@@ -36,7 +36,7 @@ class ModalPopup extends Component {
   render() {
     console.log(this.state.modal);
     return (
-      <div>
+      <div className=" d-flex justify-content-center align-items-center">
         <Button color="danger" onClick={this.toggle} style={{display: this.state.modal ? "none" : "none"}} />
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
