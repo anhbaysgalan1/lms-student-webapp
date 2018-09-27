@@ -90,7 +90,7 @@ class WatchVideo extends Component {
               clearInterval(interval);
             }
           }, 1000);
-        }, 1000);
+        }, 300);
       }
     });
   }
