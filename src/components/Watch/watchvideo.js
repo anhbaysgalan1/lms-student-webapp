@@ -141,9 +141,6 @@ class WatchVideo extends Component {
     const {
       isLoading, toggleModal, nextVideoAuto, countDownTime,
     } = this.state;
-    console.log(nextVideoAuto);
-
-
     if ((_.isEqual(videoInPlaylistReducer, {}) && _.isEqual(currentVideoReducer, {}))
     || !currentVideoReducer.like) {
       return (
