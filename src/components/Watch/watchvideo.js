@@ -11,6 +11,7 @@ import FrameYouTube from './FrameYoutube/FrameYoutube';
 import ModalPopup from './Modal/ModalPopup';
 import { NextVideosHandle } from '../../utils';
 
+let interval;
 class WatchVideo extends Component {
   constructor(props) {
     super(props);
@@ -20,9 +21,7 @@ class WatchVideo extends Component {
       isLoading: false,
       toggleModal: false,
       countDownTime: null,
-      nextVideoAuto: true,
       increaseView: true,
-      isBack: false,
     };
     this.renderList = this.renderList.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -63,11 +62,9 @@ class WatchVideo extends Component {
 
   onPlay() {
     const { currentVideoReducer, getCurrentVideoAction } = this.props;
-    const { increaseView, isBack } = this.state;
+    const { increaseView } = this.state;
     if (increaseView) {
-      if (isBack === false) {
-        currentVideoReducer.viewCount += 1;
-      }
+      currentVideoReducer.viewCount += 1;
       axios.put(`${API_VIDEO}/${currentVideoReducer._id}`, currentVideoReducer).then(
         getCurrentVideoAction(currentVideoReducer._id),
       );
@@ -79,9 +76,9 @@ class WatchVideo extends Component {
 
   onEnd() {
     const { videoInPlaylistReducer, match } = this.props;
-    const { nextVideoAuto } = this.state;
     const currentIdVideo = match.params.video;
     const listVideos = videoInPlaylistReducer.videos;
+    const element = document.getElementById('iframeYoutube');
     let closePopup = 5;
     this.setState({
       countDownTime: closePopup,
@@ -95,18 +92,14 @@ class WatchVideo extends Component {
         const NextVideos = listVideos[index + 1];
         const NextIndex = index + 1;
         setTimeout(() => {
-          const interval = setInterval(() => {
+          interval = setInterval(() => {
             closePopup -= 1;
             this.setState({
               countDownTime: closePopup,
             });
-            if (nextVideoAuto === true) {
-              if (closePopup === 0) {
-                clearInterval(interval);
-                this.handleClick(NextIndex, NextVideos);
-              }
-            } else {
+            if (closePopup === 0) {
               clearInterval(interval);
+              this.handleClick(NextIndex, NextVideos);
             }
           }, 1000);
         }, 300);
@@ -127,18 +120,9 @@ class WatchVideo extends Component {
 
   cancelAutoNextVideo() {
     this.setState({
-      nextVideoAuto: false,
       toggleModal: false,
-      isBack: true,
     });
-    const { videoInPlaylistReducer, match } = this.props;
-    const listVideos = videoInPlaylistReducer.videos;
-    const currentIdVideo = match.params.video;
-    _.map(listVideos, (video, index) => {
-      if (video._id === currentIdVideo) {
-        this.handleClick(index, video);
-      }
-    });
+    clearInterval(interval);
   }
 
   handleClick(index, video) {
@@ -148,7 +132,6 @@ class WatchVideo extends Component {
       videoActive: index,
       toggleModal: false,
       increaseView: true,
-      isBack: false,
     });
     getCurrentVideoAction(objVideo._id);
     history.push(`${objVideo._id}`);
@@ -190,7 +173,7 @@ class WatchVideo extends Component {
     if ((_.isEqual(videoInPlaylistReducer, {}) && _.isEqual(currentVideoReducer, {}))
     || !currentVideoReducer.like) {
       return (
-        <div className="d-flex justify-content-center">
+        <div className="d-flex fullLoading justify-content-center align-items-center">
           <Loading />
         </div>
       );

@@ -78,6 +78,7 @@ class FrameYouTube extends Component {
       <div id="frameVideo" className="sticky-top mt-3">
         <div className="embed-responsive embed-responsive-16by9">
           <YouTube
+            id="iframeYoutube"
             opts={opts}
             videoId={currentVideoReducer.videoId}
             onEnd={onEnd}
