@@ -17,8 +17,12 @@ class VideosInPlaylist extends Component {
     this.state = {
       isLoading: true,
       timeOut: this.timeOutLoading(),
+      hover: false,
+      activeIndex: null,
     };
     this.handleChange = this.handleChange.bind(this);
+    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
   }
 
   componentDidMount() {
@@ -46,6 +50,20 @@ class VideosInPlaylist extends Component {
     clearTimeout(timeOut);
   }
 
+  onMouseEnter(index) {
+    this.setState({
+      hover: true,
+      activeIndex: index,
+    });
+  }
+
+  onMouseLeave() {
+    this.setState({
+      hover: false,
+      activeIndex: null,
+    });
+  }
+
   timeOutLoading() {
     const timeOut = setTimeout(() => {
       this.setState({ isLoading: false });
@@ -61,6 +79,7 @@ class VideosInPlaylist extends Component {
 
   renderVideos() {
     const { videoInPlaylistReducer, searchReducer } = this.props;
+    const { hover, activeIndex } = this.state;
     if (searchReducer && !searchReducer.queryAll) {
       const ListAfterFilter = videoInPlaylistReducer.videos.filter((el) => {
         const title = el.title.toLowerCase().replace(' ', '');
@@ -68,18 +87,20 @@ class VideosInPlaylist extends Component {
         return title.includes(valueNeedSearch);
       });
       return (
-        _.map(ListAfterFilter, el => (
+        _.map(ListAfterFilter, (el, index) => (
           <Col
             md="4"
-            className="playlist-item items-video"
+            className="playlist-item items-video trans"
             key={el._id}
             onClick={() => this.handleChange(el)}
+            onMouseEnter={() => this.onMouseEnter(index)}
+            onMouseLeave={this.onMouseLeave}
           >
             <div>
               <div className="d-flex justify-content-center align-items-center">
                 <img className="fit_img" src={`https://i.ytimg.com/vi/${el.videoId}/mqdefault.jpg`} alt="thumbnails" />
               </div>
-              <div className="playlist-title">
+              <div className={hover && activeIndex === index ? 'playlist-title word-wrap' : 'playlist-title word-wrap d-inline-block text-truncate'}>
                 {el.title}
               </div>
               <div className="playlist-statics">
@@ -100,13 +121,20 @@ class VideosInPlaylist extends Component {
       );
     }
     return (
-      _.map(videoInPlaylistReducer.videos, el => (
-        <Col md="4" className="playlist-item items-video" key={el._id} onClick={() => { this.handleChange(el); }}>
+      _.map(videoInPlaylistReducer.videos, (el, index) => (
+        <Col
+          md="4"
+          className="playlist-item items-video trans"
+          key={el._id}
+          onClick={() => { this.handleChange(el); }}
+          onMouseEnter={() => this.onMouseEnter(index)}
+          onMouseLeave={this.onMouseLeave}
+        >
           <div>
             <div className="d-flex justify-content-center">
               <img className="fit_img" src={`https://i.ytimg.com/vi/${el.videoId}/mqdefault.jpg`} alt="thumbnails" />
             </div>
-            <div className="playlist-title">
+            <div className={hover && activeIndex === index ? 'playlist-title word-wrap' : 'playlist-title word-wrap d-inline-block text-truncate'}>
               {el.title}
             </div>
             <div className="playlist-statics">

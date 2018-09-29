@@ -131,7 +131,7 @@ class WatchVideo extends Component {
       return (
         _.map(listVideo, (video, index) => (
           <div key={video._id} className={videoActive === index || CurrentId === video.videoId ? 'currentVideo mt-3 d-flex align-items-center' : 'mt-3 related-video d-flex align-items-center'} onClick={() => this.handleClick(index, video)} onKeyDown={() => {}} role="presentation">
-            <div>
+            <div className="img_watchvideo mr-3">
               <img alt="thumbnails" className="img_watchvideo" src={`https://i.ytimg.com/vi/${video.videoId}/mqdefault.jpg`} />
             </div>
             {' '}

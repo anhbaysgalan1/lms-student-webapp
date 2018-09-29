@@ -5,5 +5,7 @@
 }
 
 .playlist .playlist-item.items-video > div {
+  transition: all 2s;
   height: auto !important;
+  max-height: 500px;
 }
