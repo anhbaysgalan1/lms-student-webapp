@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   Modal,
@@ -11,15 +12,17 @@ class ModalPopup extends Component {
   constructor(props) {
     super(props);
     this.props = props;
+    const { modal, countDownTime } = this.props;
     this.state = {
-      modal: this.props.modal,
-      countDownTime: this.props.countDownTime,
+      modal,
+      countDownTime,
     };
     this.toggle = this.toggle.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.modal !== this.props.modal || nextProps.countDownTime !== this.props.countDownTime) {
+    const { modal, countDownTime } = this.props;
+    if (nextProps.modal !== modal || nextProps.countDownTime !== countDownTime) {
       this.setState({
         modal: nextProps.modal,
         countDownTime: nextProps.countDownTime,
@@ -28,32 +31,39 @@ class ModalPopup extends Component {
   }
 
   toggle() {
+    const { modal } = this.state;
     this.setState({
-      modal: !this.state.modal,
+      modal: !modal,
     });
   }
 
   render() {
+    const { modal, countDownTime } = this.state;
     return (
       <div className=" d-flex justify-content-center align-items-center">
-        <Button color="danger" onClick={this.toggle} style={{display: this.state.modal ? "none" : "none"}} />
-        <Modal isOpen={this.state.modal} toggle={this.toggle}>
+        <Button color="danger" onClick={this.toggle} style={{ display: modal ? 'none' : 'none' }} />
+        <Modal isOpen={modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
           <ModalBody>
             The NextVideo is autoplay in
             {' '}
-            {this.state.countDownTime}
+            {countDownTime}
           </ModalBody>
           <ModalFooter>
-            {/* <Button color="secondary" onClick={this.props.cancelAutoNextVideo}>Cancel</Button>
+            <Button color="secondary" onClick={() => this.props.cancelAutoNextVideo()}>Cancel</Button>
             {' '}
-            <Button color="primary" onClick={this.toggle}>Next Videos</Button> */}
+            <Button color="primary" onClick={() => this.props.handleNextVideo()}>Next Videos</Button>
           </ModalFooter>
         </Modal>
       </div>
     );
   }
 }
+
+ModalPopup.propTypes = {
+  countDownTime: PropTypes.number.isRequired,
+  modal: PropTypes.bool.isRequired,
+};
 
 
 export default ModalPopup;

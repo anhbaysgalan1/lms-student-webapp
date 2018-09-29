@@ -9,6 +9,7 @@ import { API_VIDEO } from '../../statics/urls';
 import Loading from '../Loading/loading';
 import FrameYouTube from './FrameYoutube/FrameYoutube';
 import ModalPopup from './Modal/ModalPopup';
+import { NextVideosHandle } from '../../utils';
 
 class WatchVideo extends Component {
   constructor(props) {
@@ -21,12 +22,14 @@ class WatchVideo extends Component {
       countDownTime: null,
       nextVideoAuto: true,
       increaseView: true,
+      isBack: false,
     };
     this.renderList = this.renderList.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.onEnd = this.onEnd.bind(this);
     this.cancelAutoNextVideo = this.cancelAutoNextVideo.bind(this);
     this.onPlay = this.onPlay.bind(this);
+    this.handleNextVideoButton = this.handleNextVideoButton.bind(this);
   }
 
   async componentDidMount() {
@@ -60,9 +63,11 @@ class WatchVideo extends Component {
 
   onPlay() {
     const { currentVideoReducer, getCurrentVideoAction } = this.props;
-    const { increaseView } = this.state;
+    const { increaseView, isBack } = this.state;
     if (increaseView) {
-      currentVideoReducer.viewCount += 1;
+      if (isBack === false) {
+        currentVideoReducer.viewCount += 1;
+      }
       axios.put(`${API_VIDEO}/${currentVideoReducer._id}`, currentVideoReducer).then(
         getCurrentVideoAction(currentVideoReducer._id),
       );
@@ -77,8 +82,6 @@ class WatchVideo extends Component {
     const { nextVideoAuto } = this.state;
     const currentIdVideo = match.params.video;
     const listVideos = videoInPlaylistReducer.videos;
-    let NextVideos;
-    let NextIndex;
     let closePopup = 5;
     this.setState({
       countDownTime: closePopup,
@@ -89,8 +92,8 @@ class WatchVideo extends Component {
         this.setState({
           toggleModal: true,
         });
-        NextVideos = listVideos[index + 1];
-        NextIndex = index + 1;
+        const NextVideos = listVideos[index + 1];
+        const NextIndex = index + 1;
         setTimeout(() => {
           const interval = setInterval(() => {
             closePopup -= 1;
@@ -111,10 +114,30 @@ class WatchVideo extends Component {
     });
   }
 
+  handleNextVideoButton() {
+    const { videoInPlaylistReducer, match } = this.props;
+    const currentIdVideo = match.params.video;
+    const listVideos = videoInPlaylistReducer.videos;
+    // NextVideosHandle:
+    // par1: listVideos
+    // par2: currentIdVideo to compare Nextvideos
+    // par3: function with 2par (NextVideos, NextIndex)
+    NextVideosHandle(listVideos, currentIdVideo, this.handleClick);
+  }
+
   cancelAutoNextVideo() {
     this.setState({
       nextVideoAuto: false,
       toggleModal: false,
+      isBack: true,
+    });
+    const { videoInPlaylistReducer, match } = this.props;
+    const listVideos = videoInPlaylistReducer.videos;
+    const currentIdVideo = match.params.video;
+    _.map(listVideos, (video, index) => {
+      if (video._id === currentIdVideo) {
+        this.handleClick(index, video);
+      }
     });
   }
 
@@ -125,6 +148,7 @@ class WatchVideo extends Component {
       videoActive: index,
       toggleModal: false,
       increaseView: true,
+      isBack: false,
     });
     getCurrentVideoAction(objVideo._id);
     history.push(`${objVideo._id}`);
@@ -201,7 +225,7 @@ class WatchVideo extends Component {
             <p className="color-title-videos">Related videos</p>
             <div className="d-flex justify-content-end flex-column">
               {this.renderList()}
-              {toggleModal ? <ModalPopup modal={toggleModal} countDownTime={countDownTime} cancelAutoNextVideo={this.cancelAutoNextVideo} /> : ''}
+              {toggleModal ? <ModalPopup modal={toggleModal} handleNextVideo={this.handleNextVideoButton} countDownTime={countDownTime} cancelAutoNextVideo={this.cancelAutoNextVideo} /> : ''}
             </div>
           </div>
         </div>
