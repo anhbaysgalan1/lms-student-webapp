@@ -134,7 +134,7 @@ class VideosInPlaylist extends Component {
             <div className="d-flex justify-content-center">
               <img className="fit_img" src={`https://i.ytimg.com/vi/${el.videoId}/mqdefault.jpg`} alt="thumbnails" />
             </div>
-            <div className={hover && activeIndex === index ? 'playlist-title word-wrap' : 'playlist-title word-wrap d-inline-block text-truncate'}>
+            <div className={hover && activeIndex === index ? 'playlist-title word-wrap d-inline-block text-truncate' : 'playlist-title word-wrap d-inline-block text-truncate'}>
               {el.title}
             </div>
             <div className="playlist-statics">
@@ -160,7 +160,7 @@ class VideosInPlaylist extends Component {
     const { videoInPlaylistReducer } = this.props;
     if (!videoInPlaylistReducer.videos || isLoading) {
       return (
-        <div className="d-flex justify-content-center align-items-center">
+        <div className="d-flex fullLoading justify-content-center align-items-center">
           <Loading />
         </div>
       );
@@ -178,7 +178,7 @@ class VideosInPlaylist extends Component {
             </div>
             { videoInPlaylistReducer.videos.length <= 0 ? (
               <div className="mt-5 d-flex justify-content-center align-items-center">
-                <h3 className="text-light">Nothing videos to show in this Package!</h3>
+                <h3 className="text-light">Nothing to show in this Package!</h3>
               </div>
             )
               : (

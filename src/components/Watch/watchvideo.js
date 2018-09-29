@@ -20,6 +20,7 @@ class WatchVideo extends Component {
       toggleModal: false,
       countDownTime: null,
       nextVideoAuto: true,
+      increaseView: true,
     };
     this.renderList = this.renderList.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -59,10 +60,16 @@ class WatchVideo extends Component {
 
   onPlay() {
     const { currentVideoReducer, getCurrentVideoAction } = this.props;
-    currentVideoReducer.viewCount += 1;
-    axios.put(`${API_VIDEO}/${currentVideoReducer._id}`, currentVideoReducer).then(
-      getCurrentVideoAction(currentVideoReducer._id),
-    );
+    const { increaseView } = this.state;
+    if (increaseView) {
+      currentVideoReducer.viewCount += 1;
+      axios.put(`${API_VIDEO}/${currentVideoReducer._id}`, currentVideoReducer).then(
+        getCurrentVideoAction(currentVideoReducer._id),
+      );
+      this.setState({
+        increaseView: false,
+      });
+    }
   }
 
   onEnd() {
@@ -117,6 +124,7 @@ class WatchVideo extends Component {
     this.setState({
       videoActive: index,
       toggleModal: false,
+      increaseView: true,
     });
     getCurrentVideoAction(objVideo._id);
     history.push(`${objVideo._id}`);
@@ -141,7 +149,11 @@ class WatchVideo extends Component {
         ))
       );
     }
-    return <Loading />;
+    return (
+      <div className="d-flex fullLoading justify-content-center align-items-center">
+        <Loading />
+      </div>
+    );
   }
 
   render() {
