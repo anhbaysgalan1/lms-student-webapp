@@ -69,6 +69,7 @@ class FrameYouTube extends Component {
       playerVars: { // https://developers.google.com/youtube/player_parameters
         autoplay: 1,
         rel: 0,
+        modestbranding: 1,
       },
     };
     if (_.isEqual(currentVideoReducer, {})) {
