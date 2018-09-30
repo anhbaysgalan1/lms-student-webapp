@@ -165,3 +165,15 @@ export const handleGoBack = (history) => {
     }
   }
 }
+
+export const NextVideosHandle = (listVideos, currentIdVideo, funcHandle) => {
+  _.map(listVideos, (video, index) => {
+    if (video._id === currentIdVideo
+      && currentIdVideo !== listVideos[listVideos.length - 1]._id) {
+      const NextVideos = listVideos[index + 1];
+      const NextIndex = index + 1;
+      funcHandle(NextIndex, NextVideos);
+    }
+  });
+}
+

@@ -48,14 +48,8 @@ class App extends Component {
     const { user } = loginReducer;
 
     if ((user && autoLogin) || user) {
-      if (user.role === 0) return <Main />;
       return (
-        <div>
-          You havent permission to access this website!
-          <button className="ml-2" type="button" onClick={this.logoutHandle}>
-            Logout?
-          </button>
-        </div>
+        <Main />
       );
     }
     return <Login />;

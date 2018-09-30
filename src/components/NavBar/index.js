@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { Button } from 'reactstrap';
-
 import { logout } from 'actions/authAction';
 // import mainLogo from 'images/logo/logo.png';
+import { withRouter } from 'react-router';
 import SearchBar from '../SearchBar';
 
 
@@ -18,8 +18,9 @@ class NavBar extends Component {
   }
 
   logoutHandle() {
-    const { logoutAction } = this.props;
+    const { logoutAction, history } = this.props;
     logoutAction();
+    history.push('/');
   }
 
   render() {
@@ -68,6 +69,9 @@ NavBar.propTypes = {
   }).isRequired,
   showSearchBarReducer: PropTypes.bool,
   logoutAction: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
-export default connect(mapReducerProps, actions)(NavBar);
+export default withRouter(connect(mapReducerProps, actions)(NavBar));

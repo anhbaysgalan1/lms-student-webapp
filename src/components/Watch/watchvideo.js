@@ -8,7 +8,10 @@ import { fetchPlaylistWithID, getCurrentVideo, clearCurrentVideo } from '../../a
 import { API_VIDEO } from '../../statics/urls';
 import Loading from '../Loading/loading';
 import FrameYouTube from './FrameYoutube/FrameYoutube';
+import ModalPopup from './Modal/ModalPopup';
+import { NextVideosHandle } from '../../utils';
 
+let interval;
 class WatchVideo extends Component {
   constructor(props) {
     super(props);
@@ -16,9 +19,16 @@ class WatchVideo extends Component {
     this.state = {
       videoActive: null,
       isLoading: false,
+      toggleModal: false,
+      countDownTime: null,
+      increaseView: true,
     };
     this.renderList = this.renderList.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.onEnd = this.onEnd.bind(this);
+    this.cancelAutoNextVideo = this.cancelAutoNextVideo.bind(this);
+    this.onPlay = this.onPlay.bind(this);
+    this.handleNextVideoButton = this.handleNextVideoButton.bind(this);
   }
 
   async componentDidMount() {
@@ -50,16 +60,81 @@ class WatchVideo extends Component {
     }
   }
 
+  onPlay() {
+    const { currentVideoReducer, getCurrentVideoAction } = this.props;
+    const { increaseView } = this.state;
+    if (increaseView) {
+      currentVideoReducer.viewCount += 1;
+      axios.put(`${API_VIDEO}/${currentVideoReducer._id}`, currentVideoReducer).then(
+        getCurrentVideoAction(currentVideoReducer._id),
+      );
+      this.setState({
+        increaseView: false,
+      });
+    }
+  }
+
+  onEnd() {
+    const { videoInPlaylistReducer, match } = this.props;
+    const currentIdVideo = match.params.video;
+    const listVideos = videoInPlaylistReducer.videos;
+    const element = document.getElementById('iframeYoutube');
+    let closePopup = 5;
+    this.setState({
+      countDownTime: closePopup,
+    });
+    _.map(listVideos, (video, index) => {
+      if (video._id === currentIdVideo
+        && currentIdVideo !== listVideos[listVideos.length - 1]._id) {
+        this.setState({
+          toggleModal: true,
+        });
+        const NextVideos = listVideos[index + 1];
+        const NextIndex = index + 1;
+        setTimeout(() => {
+          interval = setInterval(() => {
+            closePopup -= 1;
+            this.setState({
+              countDownTime: closePopup,
+            });
+            if (closePopup === 0) {
+              clearInterval(interval);
+              this.handleClick(NextIndex, NextVideos);
+            }
+          }, 1000);
+        }, 300);
+      }
+    });
+  }
+
+  handleNextVideoButton() {
+    const { videoInPlaylistReducer, match } = this.props;
+    const currentIdVideo = match.params.video;
+    const listVideos = videoInPlaylistReducer.videos;
+    // NextVideosHandle:
+    // par1: listVideos
+    // par2: currentIdVideo to compare Nextvideos
+    // par3: function with 2par (NextVideos, NextIndex)
+    NextVideosHandle(listVideos, currentIdVideo, this.handleClick);
+  }
+
+  cancelAutoNextVideo() {
+    this.setState({
+      toggleModal: false,
+    });
+    clearInterval(interval);
+  }
+
   handleClick(index, video) {
-    const { history, getCurrentVideoAction, currentVideoReducer } = this.props;
+    const { history, getCurrentVideoAction } = this.props;
+    const objVideo = video;
     this.setState({
       videoActive: index,
+      toggleModal: false,
+      increaseView: true,
     });
-    getCurrentVideoAction(video._id);
-    // clearCurrentVideoAction();
-    video.viewCount += 1;
-    axios.put(`${API_VIDEO}/${video._id}`, video);
-    history.push(`${video._id}`);
+    getCurrentVideoAction(objVideo._id);
+    history.push(`${objVideo._id}`);
   }
 
   renderList() {
@@ -70,31 +145,41 @@ class WatchVideo extends Component {
       const listVideo = videoInPlaylistReducer.videos;
       return (
         _.map(listVideo, (video, index) => (
-          <div key={video._id} className="mt-3 related-video" style={{ display: videoActive === index || CurrentId === video.videoId ? 'none' : 'block' }} onClick={() => this.handleClick(index, video)} onKeyDown={() => {}} role="presentation">
-            <img alt="thumbnails" className="img_watchvideo" src={`https://i.ytimg.com/vi/${video.videoId}/mqdefault.jpg`} />
+          <div key={video._id} className={videoActive === index || CurrentId === video.videoId ? 'currentVideo mt-3 d-flex align-items-center' : 'mt-3 related-video d-flex align-items-center'} onClick={() => this.handleClick(index, video)} onKeyDown={() => {}} role="presentation">
+            <div className="img_watchvideo mr-3">
+              <img alt="thumbnails" className="img_watchvideo" src={`https://i.ytimg.com/vi/${video.videoId}/mqdefault.jpg`} />
+            </div>
             {' '}
-            <span className="text-light">{video.title}</span>
+            <span className="text-light text-md-left titleVideoTruncate text-truncate d-inline-block">{video.title}</span>
             {' '}
           </div>
         ))
       );
     }
-    return <Loading />;
+    return (
+      <div className="d-flex fullLoading justify-content-center align-items-center">
+        <Loading />
+      </div>
+    );
   }
 
   render() {
-    const { videoInPlaylistReducer, currentVideoReducer, getCurrentVideoAction } = this.props;
-    const { isLoading } = this.state;
+    const {
+      videoInPlaylistReducer, currentVideoReducer, getCurrentVideoAction, loginReducer,
+    } = this.props;
+    const {
+      isLoading, toggleModal, countDownTime,
+    } = this.state;
     if ((_.isEqual(videoInPlaylistReducer, {}) && _.isEqual(currentVideoReducer, {}))
     || !currentVideoReducer.like) {
       return (
-        <div className="d-flex justify-content-center">
+        <div className="d-flex fullLoading justify-content-center align-items-center">
           <Loading />
         </div>
       );
     }
     const countLike = _.isEqual(currentVideoReducer.like, []) ? 0 : currentVideoReducer.like.length;
-    const CurrentUserID = this.props.loginReducer.user.id;
+    const CurrentUserID = loginReducer.user.id;
     const { viewCount } = currentVideoReducer;
     let sttLike;
     if (currentVideoReducer.like.includes(CurrentUserID)) {
@@ -102,24 +187,29 @@ class WatchVideo extends Component {
     } else {
       sttLike = false;
     }
-    console.log(isLoading);
-    
     return (
       <div id="watchVideo">
-        <FrameYouTube
-          {...this.props}
-          isLoading={isLoading}
-          viewCount={viewCount}
-          sttLike={sttLike}
-          countLike={countLike}
-          currentVideoReducer={currentVideoReducer}
-          currentUser={this.props.loginReducer}
-          getCurrentVideoAction={getCurrentVideoAction}
-        />
-        <div>
-          <p className="color-title-videos">Related videos</p>
-          <div className="d-flex justify-content-end flex-column">
-            {this.renderList()}
+        <div className="row">
+          <div className="col-md-8">
+            <FrameYouTube
+              {...this.props}
+              isLoading={isLoading}
+              viewCount={viewCount}
+              sttLike={sttLike}
+              countLike={countLike}
+              currentVideoReducer={currentVideoReducer}
+              currentUser={loginReducer}
+              getCurrentVideoAction={getCurrentVideoAction}
+              onEnd={this.onEnd}
+              onPlay={this.onPlay}
+            />
+          </div>
+          <div className="col-md-4">
+            <p className="color-title-videos">Related videos</p>
+            <div className="d-flex justify-content-end flex-column">
+              {this.renderList()}
+              {toggleModal ? <ModalPopup modal={toggleModal} handleNextVideo={this.handleNextVideoButton} countDownTime={countDownTime} cancelAutoNextVideo={this.cancelAutoNextVideo} /> : ''}
+            </div>
           </div>
         </div>
       </div>

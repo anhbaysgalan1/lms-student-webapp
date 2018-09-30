@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import _ from 'lodash';
-import axios from 'axios';
 import { Col, Container } from 'reactstrap';
 import { fetchPlaylistWithID } from '../../actions/videosInPlaylist';
 import { showSearchBar } from '../../actions/showSearchbar';
-import { API_VIDEO } from '../../statics/urls';
 import './index1.css';
 // import thumbnail from '../../images/1.png';
 import Loading from '../Loading/loading';
@@ -19,8 +17,12 @@ class VideosInPlaylist extends Component {
     this.state = {
       isLoading: true,
       timeOut: this.timeOutLoading(),
+      hover: false,
+      activeIndex: null,
     };
     this.handleChange = this.handleChange.bind(this);
+    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
   }
 
   componentDidMount() {
@@ -48,6 +50,20 @@ class VideosInPlaylist extends Component {
     clearTimeout(timeOut);
   }
 
+  onMouseEnter(index) {
+    this.setState({
+      hover: true,
+      activeIndex: index,
+    });
+  }
+
+  onMouseLeave() {
+    this.setState({
+      hover: false,
+      activeIndex: null,
+    });
+  }
+
   timeOutLoading() {
     const timeOut = setTimeout(() => {
       this.setState({ isLoading: false });
@@ -58,13 +74,12 @@ class VideosInPlaylist extends Component {
 
   handleChange(video) {
     const { history, location } = this.props;
-    video.viewCount += 1;
-    axios.put(`${API_VIDEO}/${video._id}`, video);
     history.push(`${location.pathname}/${video._id}`);
   }
 
   renderVideos() {
     const { videoInPlaylistReducer, searchReducer } = this.props;
+    const { hover, activeIndex } = this.state;
     if (searchReducer && !searchReducer.queryAll) {
       const ListAfterFilter = videoInPlaylistReducer.videos.filter((el) => {
         const title = el.title.toLowerCase().replace(' ', '');
@@ -72,18 +87,20 @@ class VideosInPlaylist extends Component {
         return title.includes(valueNeedSearch);
       });
       return (
-        _.map(ListAfterFilter, el => (
+        _.map(ListAfterFilter, (el, index) => (
           <Col
             md="4"
-            className="playlist-item items-video"
+            className="playlist-item items-video trans"
             key={el._id}
             onClick={() => this.handleChange(el)}
+            onMouseEnter={() => this.onMouseEnter(index)}
+            onMouseLeave={this.onMouseLeave}
           >
             <div>
               <div className="d-flex justify-content-center align-items-center">
                 <img className="fit_img" src={`https://i.ytimg.com/vi/${el.videoId}/mqdefault.jpg`} alt="thumbnails" />
               </div>
-              <div className="playlist-title">
+              <div className={hover && activeIndex === index ? 'playlist-title word-wrap' : 'playlist-title word-wrap d-inline-block text-truncate'}>
                 {el.title}
               </div>
               <div className="playlist-statics">
@@ -104,13 +121,20 @@ class VideosInPlaylist extends Component {
       );
     }
     return (
-      _.map(videoInPlaylistReducer.videos, el => (
-        <Col md="4" className="playlist-item items-video" key={el._id} onClick={() => { this.handleChange(el); }}>
+      _.map(videoInPlaylistReducer.videos, (el, index) => (
+        <Col
+          md="4"
+          className="playlist-item items-video trans"
+          key={el._id}
+          onClick={() => { this.handleChange(el); }}
+          onMouseEnter={() => this.onMouseEnter(index)}
+          onMouseLeave={this.onMouseLeave}
+        >
           <div>
             <div className="d-flex justify-content-center">
               <img className="fit_img" src={`https://i.ytimg.com/vi/${el.videoId}/mqdefault.jpg`} alt="thumbnails" />
             </div>
-            <div className="playlist-title">
+            <div className={hover && activeIndex === index ? 'playlist-title word-wrap d-inline-block text-truncate' : 'playlist-title word-wrap d-inline-block text-truncate'}>
               {el.title}
             </div>
             <div className="playlist-statics">
@@ -136,7 +160,7 @@ class VideosInPlaylist extends Component {
     const { videoInPlaylistReducer } = this.props;
     if (!videoInPlaylistReducer.videos || isLoading) {
       return (
-        <div className="d-flex justify-content-center align-items-center">
+        <div className="d-flex fullLoading justify-content-center align-items-center">
           <Loading />
         </div>
       );
@@ -154,7 +178,7 @@ class VideosInPlaylist extends Component {
             </div>
             { videoInPlaylistReducer.videos.length <= 0 ? (
               <div className="mt-5 d-flex justify-content-center align-items-center">
-                <h3 className="text-light">Nothing videos to show in this Package!</h3>
+                <h3 className="text-light">Nothing to show in this Package!</h3>
               </div>
             )
               : (
