@@ -66,9 +66,10 @@ class FrameYouTube extends Component {
     } = this.state;
     const { onEnd, onPlay } = this.props;
     const opts = {
-      playerVars: { // https://developers.google.com/youtube/player_parameters
+      playerVars: {
         autoplay: 1,
         rel: 0,
+        modestbranding: 1,
       },
     };
     if (_.isEqual(currentVideoReducer, {})) {
