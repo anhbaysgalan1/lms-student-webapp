@@ -8,9 +8,11 @@ import {
 } from 'reactstrap';
 import { PropTypes } from 'prop-types';
 import { fetchPlaylist } from 'actions/playlist';
+import _ from 'lodash';
 import { showSearchBar, hideSearchBar } from '../../actions/showSearchbar';
 import { Reset } from '../../actions/searchAction';
 import { ROUTE_DETAIL_PLAYLIST } from '../routes';
+import Loading from '../Loading/loading';
 
 class ListPlaylist extends Component {
   constructor(props) {
@@ -54,7 +56,7 @@ class ListPlaylist extends Component {
     ResetAction();
   }
 
-  renderListPlaylist(listPlaylist, personalPlaylists) {
+  renderListPlaylist(listPlaylist, personalPlaylists, listLikeViewInClassRoom) {
     const { expandPlaylist } = this.state;
     let personalPlaylistElem = '';
     if (personalPlaylists && personalPlaylists.length > 0) {
@@ -72,18 +74,24 @@ class ListPlaylist extends Component {
             <div className="playlist-title">
               {playlist.playlist.title}
             </div>
-            <div className="playlist-statics">
-              <span className="playlist-views">
-                <i className="far fa-eye" />
-                {' '}
-                500
-              </span>
-              <span className="playlist-likes">
-                <i className="far fa-heart" />
-                {' '}
-                500
-              </span>
-            </div>
+            { _.map(listLikeViewInClassRoom, (el) => {
+              if (el.id === playlist.playlist._id) {
+                return (
+                  <div className="playlist-statics">
+                    <span className="playlist-views">
+                      <i className="far fa-eye" />
+                      {' '}
+                      {el.totalView}
+                    </span>
+                    <span className="playlist-likes">
+                      <i className="far fa-heart" />
+                      {' '}
+                      {el.totalLike}
+                    </span>
+                  </div>
+                );
+              }
+            })}
           </div>
         </Col>
       ));
@@ -135,18 +143,24 @@ class ListPlaylist extends Component {
               <div className="playlist-title">
                 {playlist.playlist.title}
               </div>
-              <div className="playlist-statics">
-                <span className="playlist-views">
-                  <i className="far fa-eye" />
-                  {' '}
-                  500
-                </span>
-                <span className="playlist-likes">
-                  <i className="far fa-heart" />
-                  {' '}
-                  500
-                </span>
-              </div>
+              { _.map(listLikeViewInClassRoom, (el) => {
+                if (el.id === playlist.playlist._id) {
+                  return (
+                    <div key={playlist.playlist._id} className="playlist-statics">
+                      <span className="playlist-views">
+                        <i className="far fa-eye" />
+                        {' '}
+                        {el.totalView}
+                      </span>
+                      <span className="playlist-likes">
+                        <i className="far fa-heart" />
+                        {' '}
+                        {el.totalLike}
+                      </span>
+                    </div>
+                  );
+                }
+              })}
             </div>
           </Col>
         ));
@@ -191,8 +205,7 @@ class ListPlaylist extends Component {
 
   render() {
     const { playlistReducer } = this.props;
-    const { playlist, personalPlaylists } = playlistReducer;
-
+    const { playlist, personalPlaylists, listLikeViewInClassRoom } = playlistReducer;
     if (playlist) {
       if (playlist.length === 0) {
         return (
@@ -201,13 +214,15 @@ class ListPlaylist extends Component {
       }
       return (
         <Container className="playlists">
-          {this.renderListPlaylist(playlist, personalPlaylists)}
+          {this.renderListPlaylist(playlist, personalPlaylists, listLikeViewInClassRoom)}
         </Container>
       );
     }
 
     return (
-      <div>Loading...</div>
+      <div className="d-flex fullLoading justify-content-center align-items-center">
+        <Loading />
+      </div>
     );
   }
 }

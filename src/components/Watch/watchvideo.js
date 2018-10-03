@@ -79,6 +79,11 @@ class WatchVideo extends Component {
     const currentIdVideo = match.params.video;
     const listVideos = videoInPlaylistReducer.videos;
     const element = document.getElementById('iframeYoutube');
+    const ele = document.querySelector('button.ytp-fullscreen-button.ytp-button');
+    console.log(ele);
+    console.log(element);
+    
+    
     let closePopup = 5;
     this.setState({
       countDownTime: closePopup,
