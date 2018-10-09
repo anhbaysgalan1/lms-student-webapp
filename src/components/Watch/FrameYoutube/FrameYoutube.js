@@ -6,6 +6,7 @@ import YouTube from 'react-youtube';
 import { API_VIDEO } from '../../../statics/urls';
 // import { getCurrentVideo } from '../../../actions/videosInPlaylist';
 import Loading from '../../Loading/loading';
+import CodeLive from '../../CodeLive/codelive';
 
 class FrameYouTube extends Component {
   constructor(props) {
@@ -86,6 +87,7 @@ class FrameYouTube extends Component {
             onPlay={onPlay}
           />
         </div>
+        <CodeLive />
         <div>
           <div key={currentVideoReducer._id} className="d-flex justify-content-between align-items-center">
             {/*  */}
