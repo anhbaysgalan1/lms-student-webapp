@@ -9,9 +9,7 @@ class CodeLive extends Component {
 
   render() {
     return (
-      <div>
-        <iframe title="iframe" src="https://trinket.io/embed/python3/d0bdae367e" width="100%" height="356" frameBorder="0" marginWidth="0" marginHeight="0" allowFullScreen />
-      </div>
+      <iframe title="title" src="https://trinket.io/embed/python3/f7b50018b2" width="100%" height="93%" frameBorder="0" marginWidth="0" marginHeight="0" allowFullscreen />
     );
   }
 }

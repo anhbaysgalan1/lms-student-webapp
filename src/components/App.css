@@ -162,6 +162,14 @@ label.form-check-label {
   box-shadow: 2px 2px 21px 2px black;
 }
 
+#frameCodelive{
+  height: 100%;
+  background-color: rgb(128, 128, 128);
+  border: 20px solid rgb(128, 128, 128);
+  border-radius: 22px;
+  box-shadow: 2px 2px 21px 2px black;
+}
+
 span.title-videos-content{
   font-size: 21pt;
 }

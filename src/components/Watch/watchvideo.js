@@ -10,6 +10,7 @@ import Loading from '../Loading/loading';
 import FrameYouTube from './FrameYoutube/FrameYoutube';
 import ModalPopup from './Modal/ModalPopup';
 import { NextVideosHandle } from '../../utils';
+import CodeLive from '../CodeLive/codelive';
 
 let interval;
 class WatchVideo extends Component {
@@ -78,12 +79,6 @@ class WatchVideo extends Component {
     const { videoInPlaylistReducer, match } = this.props;
     const currentIdVideo = match.params.video;
     const listVideos = videoInPlaylistReducer.videos;
-    const element = document.getElementById('iframeYoutube');
-    const ele = document.querySelector('button.ytp-fullscreen-button.ytp-button');
-    console.log(ele);
-    console.log(element);
-    
-    
     let closePopup = 5;
     this.setState({
       countDownTime: closePopup,
@@ -209,12 +204,15 @@ class WatchVideo extends Component {
               onPlay={this.onPlay}
             />
           </div>
-          <div className="col-md-4">
-            <p className="color-title-videos">Related videos</p>
-            <div className="d-flex justify-content-end flex-column">
-              {this.renderList()}
-              {toggleModal ? <ModalPopup modal={toggleModal} handleNextVideo={this.handleNextVideoButton} countDownTime={countDownTime} cancelAutoNextVideo={this.cancelAutoNextVideo} /> : ''}
+          <div className="col-md-4 mt-3">
+            {/* <p className="color-title-videos">Related videos</p> */}
+            {/* <div className="d-flex justify-content-end flex-column mt-3"> */}
+            {/* {this.renderList()} */}
+            <div id="frameCodelive">
+              <CodeLive />
             </div>
+            {toggleModal ? <ModalPopup modal={toggleModal} handleNextVideo={this.handleNextVideoButton} countDownTime={countDownTime} cancelAutoNextVideo={this.cancelAutoNextVideo} /> : ''}
+            {/* </div> */}
           </div>
         </div>
       </div>

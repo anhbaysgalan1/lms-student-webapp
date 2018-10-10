@@ -87,7 +87,7 @@ class FrameYouTube extends Component {
             onPlay={onPlay}
           />
         </div>
-        <CodeLive />
+        {/* <CodeLive /> */}
         <div>
           <div key={currentVideoReducer._id} className="d-flex justify-content-between align-items-center">
             {/*  */}
