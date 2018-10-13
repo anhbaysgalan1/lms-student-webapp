@@ -9,3 +9,10 @@ export const API_AUTH = `${API_URL}/auth`;
 export const API_PLAYLIST = `${API_URL}/playlists`;
 
 export const API_VIDEO = `${API_URL}/videos`;
+
+export const API_DETAIL_USER = `${API_URL}/users/`;
+
+// WORM
+export const API_WORM = `${ROOT_URL}/worm/api`;
+
+export const API_WORM_CLASSROOM = `${API_WORM}/grades?classroom_id=`;

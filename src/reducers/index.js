@@ -6,6 +6,7 @@ import showSearchBarReducer from './showSearchBarReducer';
 import searchReducer from './searchReducer';
 import watchvideoReducer from './stateWatchVideo';
 import currentVideoReducer from './currentVideoReducer';
+import getInfoUserReducer from './getInfoUserReducer';
 
 export default combineReducers({
   loginReducer,
@@ -15,4 +16,5 @@ export default combineReducers({
   searchReducer,
   watchvideoReducer,
   currentVideoReducer,
+  getInfoUserReducer,
 });

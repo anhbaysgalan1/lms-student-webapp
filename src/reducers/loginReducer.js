@@ -7,7 +7,7 @@ export default function (state = { user: null, errMsg: null, checked: null }, ac
   switch (action.type) {
     case LOGIN: {
       const success = _.get(action.payload.request, 'data.success');
-      const data = _.get(action.payload.request, 'data.data');
+      const data = _.get(action.payload.request, 'data.data.user');
       const message = _.get(action.payload.request, 'data.message');
       const checked = _.get(action.payload, 'checked');
       if (checked && data) {
@@ -35,7 +35,7 @@ export default function (state = { user: null, errMsg: null, checked: null }, ac
 
     case CHECK_AUTH: {
       const success = _.get(action.payload, 'data.success');
-      const data = _.get(action.payload, 'data.data');
+      const data = _.get(action.payload, 'data.data.user');
       return success ? { ...state, user: data, errMsg: null }
         : { ...state, user: null, errMsg: null };
     }

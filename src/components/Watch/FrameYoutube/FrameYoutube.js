@@ -6,7 +6,7 @@ import YouTube from 'react-youtube';
 import { API_VIDEO } from '../../../statics/urls';
 // import { getCurrentVideo } from '../../../actions/videosInPlaylist';
 import Loading from '../../Loading/loading';
-import CodeLive from '../../CodeLive/codelive';
+// import CodeLive from '../../CodeLive/codelive';
 
 class FrameYouTube extends Component {
   constructor(props) {

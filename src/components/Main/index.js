@@ -2,11 +2,15 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Container } from 'reactstrap';
 
-import { ROUTE_STUDENT_ROOT, ROUTE_DETAIL_PLAYLIST_ID, ROUTE_VIDEO } from 'components/routes';
+import {
+  ROUTE_STUDENT_ROOT, ROUTE_DETAIL_PLAYLIST_ID, ROUTE_VIDEO, ROUTE_PROFILE, ROUTE_PROFILE_SCOREBOARD,
+}
+  from 'components/routes';
 
 import NavBar from '../NavBar';
 import ListPlaylist from './Playlist.list';
 import VideosInPlaylist from '../Video/Video';
+import Profile from '../Profile/Profile';
 
 import './index.css';
 import WatchVideo from '../Watch/watchvideo';
@@ -16,6 +20,14 @@ export default function Main() {
     <Container fluid className="main-content">
       <NavBar />
       <Switch>
+        <Route
+          path={ROUTE_PROFILE_SCOREBOARD}
+          component={Profile}
+        />
+        <Route
+          path={ROUTE_PROFILE}
+          component={Profile}
+        />
         <Route
           path={ROUTE_VIDEO}
           component={WatchVideo}

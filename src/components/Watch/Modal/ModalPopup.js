@@ -22,9 +22,14 @@ class ModalPopup extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { modal, countDownTime } = this.props;
-    if (nextProps.modal !== modal || nextProps.countDownTime !== countDownTime) {
+    if (nextProps.modal !== modal) {
       this.setState({
         modal: nextProps.modal,
+      });
+    }
+
+    if (nextProps.countDownTime !== countDownTime) {
+      this.setState({
         countDownTime: nextProps.countDownTime,
       });
     }
