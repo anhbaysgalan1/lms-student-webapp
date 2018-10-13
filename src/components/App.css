@@ -25,6 +25,10 @@ body {
   height: 100%;
 }
 
+.box-shadowYoutube {
+  box-shadow: 2px 2px 16px 3px #000000;
+}
+
 html,
 body {
   height: 100%;
@@ -138,12 +142,12 @@ label.form-check-label {
   margin-left: 15px;
 }
 .related-video{
-  padding: 12px;
+  padding: 18px;
   transition: all 0.5s;
 }
 
 .related-video:hover{
-  transform: scale(1.05);
+  transform: scale(1);
   cursor: pointer;
   background-color: rgb(128, 128, 128);
   border-radius: 12px;
@@ -151,7 +155,7 @@ label.form-check-label {
 
 .currentVideo {
   padding: 12px;
-  transform: scale(1.05);
+  transform: scale(1.00001);
   cursor: pointer;
   background-color: rgb(151, 150, 150);
   border-radius: 12px;
@@ -161,16 +165,13 @@ label.form-check-label {
 	height: auto;
   background-color: rgb(128, 128, 128);
   border: 20px solid rgb(128, 128, 128);
-  border-radius: 22px;
+  /* border-radius: 22px; */
   box-shadow: 2px 2px 21px 2px black;
 }
 
 #frameCodelive{
   height: 100%;
-  background-color: rgb(128, 128, 128);
-  border: 20px solid rgb(128, 128, 128);
-  border-radius: 22px;
-  box-shadow: 2px 2px 21px 2px black;
+  transition: all 1s;
 }
 
 span.title-videos-content{
@@ -211,10 +212,36 @@ span.title-videos-content{
   background-color: rgb(51, 51, 51);
 }
 
+/* EXPAND LISTS PLAYLISTS*/
+#expandListsPlaylist {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: -9.05px;
+  top: 100px;
+  z-index: 9998;
+  opacity: 0.9;
+  transition: linear 0.2s;
+}
+
+#renderList {
+  position: absolute;
+  transition: linear 0.2s;
+  background-color: rgb(51, 51, 51);
+  width: 100%;
+  overflow: hidden;
+  /* transition: all 1s; */
+  /* border-radius: 15px; */
+}
+
+#expandListsPlaylist:hover {
+  opacity: 1;
+  cursor: pointer;
+}
 
 /* MODAL PROFILE */
 .modal-content {
-  border-radius: 2.3em !important;
+  border-radius: 13px !important;
 }
 
 .ModalRadius{

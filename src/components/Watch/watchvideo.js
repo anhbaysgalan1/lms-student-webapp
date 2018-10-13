@@ -11,8 +11,18 @@ import FrameYouTube from './FrameYoutube/FrameYoutube';
 import ModalPopup from './Modal/ModalPopup';
 import { NextVideosHandle } from '../../utils';
 import CodeLive from '../CodeLive/codelive';
+import expandButton from '../../images/button/expand_button.png';
+import expandButtonReverse from '../../images/button/expand_button_reverse.png';
 
 let interval;
+let setTimeOutCollaps;
+
+const initialCSS = {
+  expandList: '95%',
+  widthList: 100,
+  heightList: 100,
+};
+
 class WatchVideo extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +33,10 @@ class WatchVideo extends Component {
       toggleModal: false,
       countDownTime: null,
       increaseView: true,
+      // _______________
+      expandList: initialCSS.expandList,
+      widthList: initialCSS.widthList,
+      heightList: initialCSS.heightList,
     };
     this.renderList = this.renderList.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -79,7 +93,7 @@ class WatchVideo extends Component {
     const { videoInPlaylistReducer, match } = this.props;
     const currentIdVideo = match.params.video;
     const listVideos = videoInPlaylistReducer.videos;
-    let closePopup = 5;
+    let closePopup = 100;
     this.setState({
       countDownTime: closePopup,
     });
@@ -125,6 +139,35 @@ class WatchVideo extends Component {
     clearInterval(interval);
   }
 
+  expandList() {
+    const { widthList, expandList } = this.state;
+    if (widthList === 0) {
+      this.setState({
+        widthList: initialCSS.widthList,
+      });
+      setTimeOutCollaps = setTimeout(() => {
+        this.setState({
+          heightList: 0,
+        });
+      }, 500);
+    } else {
+      clearTimeout(setTimeOutCollaps);
+      this.setState({
+        widthList: 0,
+        heightList: 'auto',
+      });
+    }
+    if (expandList === initialCSS.expandList) {
+      this.setState({
+        expandList: '-9.05px',
+      });
+    } else {
+      this.setState({
+        expandList: initialCSS.expandList,
+      });
+    }
+  }
+
   handleClick(index, video) {
     const { history, getCurrentVideoAction } = this.props;
     const objVideo = video;
@@ -145,7 +188,7 @@ class WatchVideo extends Component {
       const listVideo = videoInPlaylistReducer.videos;
       return (
         _.map(listVideo, (video, index) => (
-          <div key={video._id} className={videoActive === index || CurrentId === video.videoId ? 'currentVideo mt-3 d-flex align-items-center' : 'mt-3 related-video d-flex align-items-center'} onClick={() => this.handleClick(index, video)} onKeyDown={() => {}} role="presentation">
+          <div key={video._id} className={(videoActive === index || CurrentId === video.videoId) ? 'currentVideo mt-3 d-flex align-items-center' : 'mt-3 related-video d-flex align-items-center'} onClick={() => this.handleClick(index, video)} onKeyDown={() => {}} role="presentation">
             <div className="img_watchvideo mr-3">
               <img alt="thumbnails" className="img_watchvideo" src={`https://i.ytimg.com/vi/${video.videoId}/mqdefault.jpg`} />
             </div>
@@ -168,7 +211,7 @@ class WatchVideo extends Component {
       videoInPlaylistReducer, currentVideoReducer, getCurrentVideoAction, loginReducer,
     } = this.props;
     const {
-      isLoading, toggleModal, countDownTime,
+      isLoading, toggleModal, countDownTime, expandList, widthList, heightList,
     } = this.state;
     if ((_.isEqual(videoInPlaylistReducer, {}) && _.isEqual(currentVideoReducer, {}))
     || !currentVideoReducer.like) {
@@ -190,7 +233,7 @@ class WatchVideo extends Component {
     return (
       <div id="watchVideo">
         <div className="row">
-          <div className="col-md-8">
+          <div className="col-md-8 sticky-top">
             <FrameYouTube
               {...this.props}
               isLoading={isLoading}
@@ -204,17 +247,20 @@ class WatchVideo extends Component {
               onPlay={this.onPlay}
             />
           </div>
-          <div className="col-md-4 mt-3">
-            {/* <p className="color-title-videos">Related videos</p> */}
-            {/* <div className="d-flex justify-content-end flex-column mt-3"> */}
-            {/* {this.renderList()} */}
+          <div className="col-md-4 mt-3 position-relative">
+            <div id="expandListsPlaylist" onClick={() => this.expandList()} role="presentation" className="sticky-top" style={{ left: `${expandList}` }}>
+              <img src={widthList === 0 ? expandButtonReverse : expandButton} alt="button" />
+            </div>
+            <div id="renderList" style={{ transform: `translateX(${widthList}%)`, height: heightList }}>
+              {this.renderList()}
+            </div>
             <div id="frameCodelive">
               <CodeLive />
             </div>
             {toggleModal ? <ModalPopup modal={toggleModal} handleNextVideo={this.handleNextVideoButton} countDownTime={countDownTime} cancelAutoNextVideo={this.cancelAutoNextVideo} /> : ''}
-            {/* </div> */}
           </div>
         </div>
+
       </div>
     );
   }
